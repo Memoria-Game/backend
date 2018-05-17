@@ -14,25 +14,23 @@ trait StageComponent extends CoursesComponent with StudentsComponent {
   import profile.api._
 
   // This class convert the database's students table in a object-oriented entity: the Student model.
-  class CoursesStudentsTable(tag: Tag) extends Table[CourseStudent](tag, "COURSES_STUDENTS") {
-    def id = column[Long]("ID", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
-    def courseId = column[Long]("COURSE_ID")
-    def studentId = column[Long]("STUDENT_ID")
+  class StageTable(tag: Tag) extends Table[Stage](tag, "STAGE") {
+    def levelNumber = column[Long]("LEVELNUMBER", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
+    def nbOfRedBonus = column[Int]("NBOFREDBONUS")
+    def nbOfYellowBonus = column[Int]("NBOFYELLOWBONUS")
+    def nbOfWalls = column[Int]("NBOFWALLS")
+    def nbOfRows = column[Int]("NBOFROWS")
+    def nbOfCols = column[Int]("NBOFCOLS")
+    def timeOfDisplay = column[Double]("TIMEOFDISPLAY")
 
     // Map the attributes with the model; the ID is optional.
-    def * = (id.?, courseId, studentId) <> (CourseStudent.tupled, CourseStudent.unapply)
+    def * = (levelNumber, nbOfRedBonus, nbOfYellowBonus, nbOfWalls, nbOfRows, nbOfCols, timeOfDisplay) <> (Stage.tupled, Stage.unapply)
   }
 }
 
 @Singleton
-class CoursesStudentsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext) extends CoursesStudentsComponent with HasDatabaseConfigProvider[JdbcProfile] {
+class StageDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
+  extends StageComponent with HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api._
 
-  // Get the object-oriented list of courses-students directly from the query table.
-  val coursesStudents = TableQuery[CoursesStudentsTable]
-
-  /** Retrieve the list of courses sorted by name */
-  def list(): Future[Seq[CourseStudent]] = {
-    db.run(coursesStudents.result)
-  }
 }
