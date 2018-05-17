@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 5.7.19, for macos10.12 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `i5djago8oq60ebh3` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
+USE `i5djago8oq60ebh3`;
+-- MySQL dump 10.13  Distrib 5.7.12, for osx10.9 (x86_64)
 --
--- Host: localhost    Database: scala_sql_example
+-- Host: jfrpocyduwfg38kq.chr7pe7iynqr.eu-west-1.rds.amazonaws.com    Database: i5djago8oq60ebh3
 -- ------------------------------------------------------
--- Server version	5.7.19
+-- Server version	5.7.19-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,85 +18,143 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `course`
+-- Table structure for table `friends`
 --
 
-DROP TABLE IF EXISTS `courses`;
+DROP TABLE IF EXISTS `friends`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `courses` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `description` longtext NOT NULL,
-  `hasApero` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `friends` (
+  `idUser1` int(11) NOT NULL,
+  `idUser2` int(11) NOT NULL,
+  `friendsSince` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idUser1`,`idUser2`),
+  KEY `idUser2_idx` (`idUser2`),
+  CONSTRAINT `idUser1` FOREIGN KEY (`idUser1`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `idUser2` FOREIGN KEY (`idUser2`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `courses`
+-- Dumping data for table `friends`
 --
 
-LOCK TABLES `courses` WRITE;
-/*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (1,'GEN','Du génie, des logiciels, et des ninjas.',1),(2,'TWEB','Apprendre aux étudiants que JavaScript, c’est cool.',1),(3,'SCALA','Apprendre aux étudiants que Scala aussi, c’est cool.',NULL),(4,'PRR','Cours d’ADA et de programmation répartie.',0);
-/*!40000 ALTER TABLE `courses` ENABLE KEYS */;
+LOCK TABLES `friends` WRITE;
+/*!40000 ALTER TABLE `friends` DISABLE KEYS */;
+/*!40000 ALTER TABLE `friends` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `courses_students`
+-- Table structure for table `game`
 --
 
-DROP TABLE IF EXISTS `courses_students`;
+DROP TABLE IF EXISTS `game`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `courses_students` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `course_id` int(11) NOT NULL,
-  `student_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `student_id_idx` (`student_id`),
-  KEY `fk_course_student_course_idx` (`course_id`),
-  CONSTRAINT `fk_course_student_course` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_course_student_student` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `game` (
+  `idGame` int(11) NOT NULL AUTO_INCREMENT,
+  `score` int(11) NOT NULL DEFAULT '0',
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `isOver` int(11) NOT NULL DEFAULT '0',
+  `nbLifes` int(11) NOT NULL DEFAULT '0',
+  `nbYellowBonus` int(11) NOT NULL DEFAULT '0',
+  `userId` int(11) NOT NULL,
+  PRIMARY KEY (`idGame`),
+  KEY `userId_idx` (`userId`),
+  CONSTRAINT `userId` FOREIGN KEY (`userId`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `courses_students`
+-- Dumping data for table `game`
 --
 
-LOCK TABLES `courses_students` WRITE;
-/*!40000 ALTER TABLE `courses_students` DISABLE KEYS */;
-INSERT INTO `courses_students` VALUES (1,1,1),(2,2,1),(3,3,1),(4,4,1),(5,1,3),(6,2,3),(7,3,3),(8,4,3),(9,2,2),(10,1,4),(11,2,4),(12,3,4);
-/*!40000 ALTER TABLE `courses_students` ENABLE KEYS */;
+LOCK TABLES `game` WRITE;
+/*!40000 ALTER TABLE `game` DISABLE KEYS */;
+/*!40000 ALTER TABLE `game` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `students`
+-- Table structure for table `stage`
 --
 
-DROP TABLE IF EXISTS `students`;
+DROP TABLE IF EXISTS `stage`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `students` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `firstName` varchar(45) NOT NULL,
-  `lastName` varchar(45) NOT NULL,
-  `age` int(11) NOT NULL,
-  `isInsolent` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `stage` (
+  `levelNumber` int(11) NOT NULL AUTO_INCREMENT,
+  `nbOfRedBonus` int(11) NOT NULL DEFAULT '0',
+  `nbOfYellowBonus` int(11) NOT NULL DEFAULT '0',
+  `nbOfWalls` int(11) NOT NULL DEFAULT '0',
+  `nbOfRows` int(11) NOT NULL DEFAULT '0',
+  `nbOfCols` int(11) NOT NULL DEFAULT '0',
+  `timeOfDisplay` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`levelNumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `students`
+-- Dumping data for table `stage`
 --
 
-LOCK TABLES `students` WRITE;
-/*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Valentin','Nififi',23,1),(2,'Céline','Jacquart',21,0),(3,'Guillaume','Jurapu',18,1),(4,'Michel','Sainte-Marie',24,0);
-/*!40000 ALTER TABLE `students` ENABLE KEYS */;
+LOCK TABLES `stage` WRITE;
+/*!40000 ALTER TABLE `stage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stage_game`
+--
+
+DROP TABLE IF EXISTS `stage_game`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stage_game` (
+  `idGame` int(11) NOT NULL,
+  `idStage` int(11) NOT NULL,
+  `scoreStage` int(11) NOT NULL DEFAULT '0',
+  `timeAtStage` int(11) NOT NULL DEFAULT '0',
+  `RedBonusUsed` int(11) NOT NULL DEFAULT '0',
+  `YellowBonusUsed` int(11) NOT NULL DEFAULT '0',
+  `RedBonusTaken` int(11) NOT NULL DEFAULT '0',
+  `YellowBonusTaken` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idGame`,`idStage`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stage_game`
+--
+
+LOCK TABLES `stage_game` WRITE;
+/*!40000 ALTER TABLE `stage_game` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stage_game` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `idUser` int(11) NOT NULL AUTO_INCREMENT,
+  `pseudo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `country` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`idUser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -106,4 +166,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-30 22:58:01
+-- Dump completed on 2018-05-17 14:17:44

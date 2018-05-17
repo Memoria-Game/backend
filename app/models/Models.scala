@@ -1,11 +1,39 @@
 package models
 
-// Represent a database's course entry; the ID is optional because we don't necessary want to have it (for example when
-// we create a new course).
-case class Course(id: Option[Long], name: String, description: String, hasApero: Option[Boolean])
+import java.sql.Timestamp
 
-// Represent a database's student entry.
-case class Student(id: Option[Long], firstName: String, lastName: String, age: Int, isInsolent: Boolean)
+case class User(idUser: Option[Long],
+                pseudo: String,
+                email: String,
+                password: String,
+                country: String)
 
-// Represent a database's course <- >student entry.
-case class CourseStudent(id: Option[Long], courseId: Long, studentId: Long)
+case class Friends(idUser1: Long,
+                   idUser2: Long,
+                   friendsSince: Timestamp)
+
+
+case class Stage(levelNumber: Option[Long],
+                 nbOfRedBonus: Long,
+                 nbOfYellowBonus: Long,
+                 nbOfWalls: Long,
+                 nbOfRows: Long,
+                 nbOfCols: Long,
+                 timeOfDisplay: Long)
+
+case class Stage_Game(idGame: Long,
+                      idStage: Long,
+                      scoreStage: Long,
+                      timeAtStage: Long,
+                      RedBonusUsed: Long,
+                      YellowBonusUsed: Long,
+                      RedBonusTaken: Long,
+                      YellowBonusTaken: Long)
+
+case class Game(idGame: Option[Long],
+                score: Long, date: Timestamp,
+                isOver: Boolean,
+                nbLifes: Int,
+                nbYellowBonus: Int,
+                userId: Long)
+

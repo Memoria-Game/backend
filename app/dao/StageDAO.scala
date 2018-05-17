@@ -1,14 +1,14 @@
 package dao
 
 import javax.inject.{Inject, Singleton}
-import models.CourseStudent
+import models.Stage
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.{ExecutionContext, Future}
 
 // We use a trait component here in order to share the StudentsTable class with other DAO, thanks to the inheritance.
-trait CoursesStudentsComponent extends CoursesComponent with StudentsComponent {
+trait StageComponent extends CoursesComponent with StudentsComponent {
   self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import profile.api._

@@ -11,7 +11,7 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class StudentsController @Inject()(cc: ControllerComponents, studentDAO: StudentsDAO) extends AbstractController(cc) {
+class GameController @Inject()(cc: ControllerComponents, studentDAO: StudentsDAO) extends AbstractController(cc) {
 
   // Convert a Student-model object into a JsValue representation, which means that we serialize it into JSON.
   implicit val studentToJson: Writes[Student] = (

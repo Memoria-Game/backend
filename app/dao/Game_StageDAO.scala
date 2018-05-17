@@ -1,20 +1,20 @@
 package dao
 
 import javax.inject.{Inject, Singleton}
-import models.Student
+import models.Stage_Game
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.{ExecutionContext, Future}
 
 // We use a trait component here in order to share the StudentsTable class with other DAO, thanks to the inheritance.
-trait StudentsComponent {
+trait Stage_GameComponent {
   self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import profile.api._
 
   // This class convert the database's students table in a object-oriented entity: the Student model.
-  class StudentsTable(tag: Tag) extends Table[Student](tag, "STUDENTS") {
+  class StudentsTable(tag: Tag) extends Table[Stage_Game](tag, "STUDENTS") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
     def firstName = column[String]("FIRSTNAME")
     def lastName = column[String]("LASTNAME")
@@ -22,7 +22,7 @@ trait StudentsComponent {
     def isInsolent = column[Boolean]("ISINSOLENT")
 
     // Map the attributes with the model; the ID is optional.
-    def * = (id.?, firstName, lastName, age, isInsolent) <> (Student.tupled, Student.unapply)
+    def * = (id.?, firstName, lastName, age, isInsolent) <> (Stage_Game.tupled, Stage_Game.unapply)
   }
 }
 
@@ -31,7 +31,7 @@ trait StudentsComponent {
 // driver. The class extends the students' query table and loads the JDBC profile configured in the application's
 // configuration file.
 @Singleton
-class StudentsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext) extends StudentsComponent with HasDatabaseConfigProvider[JdbcProfile] {
+class Stage_GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext) extends StudentsComponent with HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api._
 
   // Get the object-oriented list of students directly from the query table.

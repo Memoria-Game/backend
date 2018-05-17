@@ -11,7 +11,7 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class CoursesController @Inject()(cc: ControllerComponents, coursesDAO: CoursesDAO) extends AbstractController(cc) {
+class UserController @Inject()(cc: ControllerComponents, coursesDAO: CoursesDAO) extends AbstractController(cc) {
 
   // Refer to the StudentsController class in order to have more explanations.
   implicit val courseToJson: Writes[Course] = (

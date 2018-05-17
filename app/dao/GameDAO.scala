@@ -9,7 +9,7 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 
-trait CoursesComponent {
+trait GameComponent {
   self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import profile.api._
