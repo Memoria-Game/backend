@@ -15,8 +15,8 @@ trait StageGameComponent {
 
   // This class convert the database's students table in a object-oriented entity: the Student model.
   class StageGameTable(tag: Tag) extends Table[StageGame](tag, "STAGE_GAME") {
-    def idGame = column[Long]("IDGAME", O.PrimaryKey) // Primary key, auto-incremented
-    def idStage = column[Long]("IDSTAGE", O.PrimaryKey) // Primary key, auto-incremented
+    def idGame = column[Long]("IDGAME") // Primary key, auto-incremented
+    def idStage = column[Long]("IDSTAGE") // Primary key, auto-incremented
     def scoreStage = column[Long]("SCORESTAGE")
     def timeAtStage = column[Long]("TIMEATSTAGE")
     def redBonusUsed = column[Long]("REDBONUSUSED")
@@ -24,9 +24,12 @@ trait StageGameComponent {
     def redBonusTaken = column[Long]("REDBONUSTAKEN")
     def yellowBonusTaken = column[Long]("YELLOWBONUSTAKEN")
 
+    def pk = primaryKey("primaryKey", (idGame, idStage))
+
     // Map the attributes with the model; the ID is optional.
-    def * = (idGame, idStage, scoreStage, timeAtStage, redBonusUsed, yellowBonusUsed, redBonusTaken, redBonusTaken) <> (StageGame.tupled, StageGame.unapply)
-  }
+    def * = (idGame.?, idStage.?, scoreStage, timeAtStage, redBonusUsed, yellowBonusUsed, redBonusTaken, redBonusTaken) <> (StageGame.tupled, StageGame.unapply)
+
+   }
 }
 
 // This class contains the object-oriented list of students and offers methods to query the data.
@@ -39,6 +42,6 @@ class GameStageDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
   import profile.api._
 
   // Get the object-oriented list of students directly from the query table.
-  val students = TableQuery[StageGame]
+  // val students = TableQuery[StageGame]
 
 }

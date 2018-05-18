@@ -8,7 +8,7 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.{ExecutionContext, Future}
 
 // We use a trait component here in order to share the StudentsTable class with other DAO, thanks to the inheritance.
-trait StageComponent extends CoursesComponent with StudentsComponent {
+trait StageComponent {
   self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import profile.api._
@@ -24,7 +24,7 @@ trait StageComponent extends CoursesComponent with StudentsComponent {
     def timeOfDisplay = column[Double]("TIMEOFDISPLAY")
 
     // Map the attributes with the model; the ID is optional.
-    def * = (levelNumber, nbOfRedBonus, nbOfYellowBonus, nbOfWalls, nbOfRows, nbOfCols, timeOfDisplay) <> (Stage.tupled, Stage.unapply)
+    def * = (levelNumber.?, nbOfRedBonus, nbOfYellowBonus, nbOfWalls, nbOfRows, nbOfCols, timeOfDisplay) <> (Stage.tupled, Stage.unapply)
   }
 }
 

@@ -1,5 +1,7 @@
 package dao
 
+import java.sql.Timestamp
+
 import javax.inject.{Inject, Singleton}
 import models.Friends
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
@@ -15,14 +17,15 @@ trait FriendsComponent {
 
   // This class convert the database's students table in a object-oriented entity: the Student model.
   class FriendsTable(tag: Tag) extends Table[Friends](tag, "FRIENDS") {
-    def id = column[Long]("ID", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
-    def firstName = column[String]("FIRSTNAME")
-    def lastName = column[String]("LASTNAME")
-    def age = column[Int]("AGE")
-    def isInsolent = column[Boolean]("ISINSOLENT")
+    def idUser1 = column[Long]("IDUSER1") // Primary key, auto-incremented
+    def idUser2 = column[Long]("IDUSER2")
+    def friendsSince = column[Timestamp]("FRIENDSSINCE")
+
+    def pk = primaryKey("primaryKey",(idUser1, idUser2))
 
     // Map the attributes with the model; the ID is optional.
-    def * = (id.?, firstName, lastName, age, isInsolent) <> (Student.tupled, Student.unapply)
+    def * = (idUser1.?, idUser2.?, friendsSince) <> (Friends.tupled, Friends.unapply)
+
   }
 }
 

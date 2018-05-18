@@ -31,7 +31,8 @@ trait UserComponent {
 // driver. The class extends the students' query table and loads the JDBC profile configured in the application's
 // configuration file.
 @Singleton
-class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext) extends UserComponent with HasDatabaseConfigProvider[JdbcProfile] {
+class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
+  extends UserComponent with HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api._
 
 }

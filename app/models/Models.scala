@@ -8,8 +8,8 @@ case class User(idUser: Option[Long],
                 password: String,
                 country: String)
 
-case class Friends(idUser1: Long,
-                   idUser2: Long,
+case class Friends(idUser1: Option[Long],
+                   idUser2: Option[Long],
                    friendsSince: Timestamp)
 
 case class Stage(levelNumber: Option[Long],
@@ -20,8 +20,8 @@ case class Stage(levelNumber: Option[Long],
                  nbOfCols: Int,
                  timeOfDisplay: Double)
 
-case class StageGame(idGame: Long,
-                      idStage: Long,
+case class StageGame(idGame: Option[Long],
+                      idStage: Option[Long],
                       scoreStage: Long,
                       timeAtStage: Long,
                       redBonusUsed: Long,

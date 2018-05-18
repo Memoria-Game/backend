@@ -1,8 +1,7 @@
 package controllers
 
-import dao.StudentsDAO
+import dao.GameDAO
 import javax.inject.{Inject, Singleton}
-import models.Student
 import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
@@ -11,8 +10,9 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class GameController @Inject()(cc: ControllerComponents, studentDAO: StudentsDAO) extends AbstractController(cc) {
+class GameController @Inject()(cc: ControllerComponents, gameDAO: GameDAO) extends AbstractController(cc) {
 
+  /*
   // Convert a Student-model object into a JsValue representation, which means that we serialize it into JSON.
   implicit val studentToJson: Writes[Student] = (
     (JsPath \ "id").write[Option[Long]] and
@@ -133,5 +133,5 @@ class GameController @Inject()(cc: ControllerComponents, studentDAO: StudentsDAO
       ))
     }
   }
-
+  */
 }

@@ -1,8 +1,7 @@
 package controllers
 
-import dao.CoursesDAO
+import dao.UserDAO
 import javax.inject.{Inject, Singleton}
-import models.Course
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
@@ -11,8 +10,9 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class UserController @Inject()(cc: ControllerComponents, coursesDAO: CoursesDAO) extends AbstractController(cc) {
+class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO) extends AbstractController(cc) {
 
+  /*
   // Refer to the StudentsController class in order to have more explanations.
   implicit val courseToJson: Writes[Course] = (
     (JsPath \ "id").write[Option[Long]] and
@@ -96,5 +96,5 @@ class UserController @Inject()(cc: ControllerComponents, coursesDAO: CoursesDAO)
       ))
     }
   }
-
+  */
 }
