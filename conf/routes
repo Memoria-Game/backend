@@ -4,7 +4,7 @@
 # ~~~~
 
 # Pages
-#GET     /                           controllers.HomeController.index
+GET     /                            controllers.UserController.welcome
 #+nocsrf # the "nocsrf" modifier tag is used to disable the CSRF filter for the following route in order to avoid an "Unauthorized" error
 #POST    /                           controllers.HomeController.postStudent
 #GET     /about                      controllers.HomeController.about

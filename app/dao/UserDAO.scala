@@ -35,4 +35,11 @@ class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
   extends UserComponent with HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api._
 
+  val users = TableQuery[UsersTable]
+
+  def list():Future[Seq[User]] = {
+    val query = users
+    db.run(query.result)
+  }
+
 }
