@@ -8,30 +8,30 @@ case class User(idUser: Option[Long],
                 password: String,
                 country: String)
 
-case class Friends(idUser1: Long,
-                   idUser2: Long,
+case class Friends(idUser1: Option[Long],
+                   idUser2: Option[Long],
                    friendsSince: Timestamp)
 
-
 case class Stage(levelNumber: Option[Long],
-                 nbOfRedBonus: Long,
-                 nbOfYellowBonus: Long,
-                 nbOfWalls: Long,
-                 nbOfRows: Long,
-                 nbOfCols: Long,
-                 timeOfDisplay: Long)
+                 nbOfRedBonus: Int,
+                 nbOfYellowBonus: Int,
+                 nbOfWalls: Int,
+                 nbOfRows: Int,
+                 nbOfCols: Int,
+                 timeOfDisplay: Double)
 
-case class Stage_Game(idGame: Long,
-                      idStage: Long,
+case class StageGame(idGame: Option[Long],
+                      idStage: Option[Long],
                       scoreStage: Long,
                       timeAtStage: Long,
-                      RedBonusUsed: Long,
-                      YellowBonusUsed: Long,
-                      RedBonusTaken: Long,
-                      YellowBonusTaken: Long)
+                      redBonusUsed: Long,
+                      yellowBonusUsed: Long,
+                      redBonusTaken: Long,
+                      yellowBonusTaken: Long)
 
 case class Game(idGame: Option[Long],
-                score: Long, date: Timestamp,
+                score: Long,
+                date: Timestamp,
                 isOver: Boolean,
                 nbLifes: Int,
                 nbYellowBonus: Int,

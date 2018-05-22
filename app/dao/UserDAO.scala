@@ -7,22 +7,22 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.{ExecutionContext, Future}
 
-// We use a trait component here in order to share the StudentsTable class with other DAO, thanks to the inheritance.
+// We use a trait component here in order to share the User class with other DAO, thanks to the inheritance.
 trait UserComponent {
   self: HasDatabaseConfigProvider[JdbcProfile] =>
 
   import profile.api._
 
   // This class convert the database's students table in a object-oriented entity: the Student model.
-  class UsersTable(tag: Tag) extends Table[User](tag, "STUDENTS") {
-    def id = column[Long]("ID", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
-    def firstName = column[String]("FIRSTNAME")
-    def lastName = column[String]("LASTNAME")
-    def age = column[Int]("AGE")
-    def isInsolent = column[Boolean]("ISINSOLENT")
+  class UsersTable(tag: Tag) extends Table[User](tag, "USER") {
+    def id = column[Long]("IDUSER", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
+    def pseudo = column[String]("PSEUDO")
+    def email = column[String]("EMAIL")
+    def password = column[String]("PASSWORD")
+    def country = column[String]("COUNTRY")
 
     // Map the attributes with the model; the ID is optional.
-    def * = (id.?, firstName, lastName, age, isInsolent) <> (User.tupled, User.unapply)
+    def * = (id.?, pseudo, email, password, country) <> (User.tupled, User.unapply)
   }
 }
 
@@ -31,46 +31,15 @@ trait UserComponent {
 // driver. The class extends the students' query table and loads the JDBC profile configured in the application's
 // configuration file.
 @Singleton
-class StudentsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext) extends StudentsComponent with HasDatabaseConfigProvider[JdbcProfile] {
+class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
+  extends UserComponent with HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api._
 
-  // Get the object-oriented list of students directly from the query table.
-  val students = TableQuery[StudentsTable]
+  val users = TableQuery[UsersTable]
 
-  /** Retrieve the list of students */
-  def list(): Future[Seq[Student]] = {
-    val query = students.sortBy(s => (s.lastName, s.firstName))
+  def list():Future[Seq[User]] = {
+    val query = users
     db.run(query.result)
   }
 
-  /** Retrieve the names (first and last names) and the age of the students, whose age is inferior of the given one,
-    * then sort the results by last name, then first name */
-  def findIfAgeIsInferior(age: Int): Future[Seq[(String, String, Int)]] = {
-    val query = (for {
-      student <- students
-      if student.age < age
-    } yield (student.firstName, student.lastName, student.age)).sortBy(s => (s._2, s._1))
-
-    db.run(query.result)
-  }
-
-  /** Retrieve a student from the id. */
-  def findById(id: Long): Future[Option[Student]] =
-    db.run(students.filter(_.id === id).result.headOption)
-
-  /** Insert a new student, then return it. */
-  def insert(student: Student): Future[Student] = {
-    val insertQuery = students returning students.map(_.id) into ((student, id) => student.copy(Some(id)))
-    db.run(insertQuery += student)
-  }
-
-  /** Update a student, then return an integer that indicate if the student was found (1) or not (0). */
-  def update(id: Long, student: Student): Future[Int] = {
-    val studentToUpdate: Student = student.copy(Some(id))
-    db.run(students.filter(_.id === id).update(studentToUpdate))
-  }
-
-  /** Delete a student, then return an integer that indicate if the student was found (1) or not (0). */
-  def delete(id: Long): Future[Int] =
-    db.run(students.filter(_.id === id).delete)
 }
