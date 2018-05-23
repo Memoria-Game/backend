@@ -1,3 +1,5 @@
+package utils
+
 class LevelGenerator(nbRows:Int,
                      nbCols:Int,
                      nbYellowBonus:Int,
@@ -104,7 +106,3 @@ class LevelGenerator(nbRows:Int,
     return level
   }
 }
-
-val generator = new LevelGenerator(5, 5, 2, 2, 7)
-generator.generateLevel() foreach { row => row foreach print; println }
-println()

@@ -42,4 +42,6 @@ class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
     db.run(query.result)
   }
 
+
+
 }
