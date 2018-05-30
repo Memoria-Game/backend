@@ -25,3 +25,19 @@ GET     /                            controllers.UserController.welcome
 ## Map static resources from the /public folder to the /assets URL path
 #GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
+POST /signin controllers.UserController.signin
+POST /signup controllers.UserController.signup
+POST /logout controllers.UserController.logout
+POST /logout controllers.UserController.logout
+
+# Game requests
+POST /game/endStage controllers.GameController.endStage
+GET /game/nextStage controllers.GameController.nextStage
+
+# Statistics requests
+GET /statisctics/countries controllers.StatisticsController.scoreByCountries
+GET /statisctics/friends controllers.StatisticsController.friendsLeaderboard
+GET /statisctics/best_score controllers.StatisticsController.pieChart
+GET /statisctics/personnal controllers.StatisticsController.personnalStats
+
+POST /statistics/add_friend controllers.UserController.addFriend
