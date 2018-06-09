@@ -16,11 +16,11 @@ import ExecutionContext.Implicits.global
 class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO) extends AbstractController(cc) {
 
   implicit val userToJson: Writes[User] = (
-      (JsPath \ "idUser").write[Option[Long]] and
-        (JsPath \ "pseudo").write[String] and
-        (JsPath \ "email").write[String] and
-        (JsPath \ "password").write[String] and
-        (JsPath \ "country").write[String]
+    (JsPath \ "idUser").write[Option[Long]] and
+      (JsPath \ "pseudo").write[String] and
+      (JsPath \ "email").write[String] and
+      (JsPath \ "password").write[String] and
+      (JsPath \ "country").write[String]
     )(unlift(User.unapply))
 
   def welcome = Action.async {
