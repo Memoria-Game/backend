@@ -1,33 +1,40 @@
 package controllers
 
-import dao.UserDAO
-
-import concurrent._
+import dao.{UserDAO}
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
+import play.api.libs.json.Writes._
 import play.api.libs.json._
 import play.api.mvc.{AbstractController, ControllerComponents}
 
-import ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO) extends AbstractController(cc) {
 
-  implicit val userToJson: Writes[User] = (
+  implicit val gamToJson: Writes[User] = (
     (JsPath \ "idUser").write[Option[Long]] and
       (JsPath \ "pseudo").write[String] and
       (JsPath \ "email").write[String] and
       (JsPath \ "password").write[String] and
       (JsPath \ "country").write[String]
-    )(unlift(User.unapply))
+    ) (unlift(User.unapply))
 
   def welcome = Action.async {
     val users = userDAO.list
 
     users.map(u => Ok(Json.toJson(u)))
   }
+
+  def signin = ???
+
+  def signup = ???
+
+  def logout = ???
+
+  def addFriend = ???
 
   /*
   // Refer to the StudentsController class in order to have more explanations.

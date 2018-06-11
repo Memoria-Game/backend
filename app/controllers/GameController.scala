@@ -1,16 +1,43 @@
 package controllers
 
-import dao.GameDAO
-import javax.inject.{Inject, Singleton}
-import play.api.libs.json._
-import play.api.libs.json.Reads._
+import java.sql.Timestamp
+
+import dao.{GameDAO}
+import javax.inject._
+import models._
 import play.api.libs.functional.syntax._
+import play.api.libs.json.Writes._
+import play.api.libs.json._
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class GameController @Inject()(cc: ControllerComponents, gameDAO: GameDAO) extends AbstractController(cc) {
+
+
+  implicit val GameToJson: Writes[Game] = (
+    (JsPath \ "idGame").write[Option[Long]] and
+      (JsPath \ "score").write[Long] and
+      (JsPath \ "date").write[Timestamp] and
+      (JsPath \ "isOver").write[Boolean] and
+      (JsPath \ "nbLifes").write[Long] and
+      (JsPath \ "nbYellowBonus").write[Long] and
+      (JsPath \ "userId").write[Long]
+    ) (unlift(Game.unapply))
+
+
+  def getGame(userId: Long) = Action.async {
+    val optionalGame = gameDAO.getAllGameOfUser(userId)
+    optionalGame map (s => Ok(Json.toJson(s)))
+  }
+
+
+  def endStage = ???
+
+  def nextStage = ???
+
+  def resume = ???
 
   /*
   // Convert a Student-model object into a JsValue representation, which means that we serialize it into JSON.

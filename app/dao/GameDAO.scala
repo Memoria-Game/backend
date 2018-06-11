@@ -4,12 +4,14 @@ import java.sql.Timestamp
 
 import scala.concurrent.Future
 import javax.inject.{Inject, Singleton}
-import models.Game
+import models.{Game, User}
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.db.slick.HasDatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
+
+
 
 trait GameComponent {
   self: HasDatabaseConfigProvider[JdbcProfile] =>
@@ -17,15 +19,14 @@ trait GameComponent {
   import profile.api._
 
   // This class convert the database's courses table in a object-oriented entity: the Course model.
-  class GameTable(tag: Tag) extends Table[Game](tag, "GAMES") {
+  class GameTable(tag: Tag) extends Table[Game](tag, "GAME") {
     def id = column[Long]("IDGAME", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
     def score = column[Long]("SCORE")
     def date = column[Timestamp]("DATE")
     def isOver = column[Boolean]("ISOVER")
-    def nbLifes = column[Int]("NBLIFES")
-    def nbYellowBonus = column[Int]("NBYELLOWBONUS")
+    def nbLifes = column[Long]("NBLIFES")
+    def nbYellowBonus = column[Long]("NBYELLOWBONUS")
     def userId = column[Long]("USERID")
-
     // Map the attributes with the model; the ID is optional.
     def * = (id.?, score, date, isOver, nbLifes, nbYellowBonus, userId) <> (Game.tupled, Game.unapply)
   }
@@ -38,7 +39,21 @@ trait GameComponent {
 // configuration file.
 @Singleton
 class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
-  extends GameComponent with HasDatabaseConfigProvider[JdbcProfile] {
+  extends GameComponent with UserComponent with HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api._
+
+  val games = TableQuery[GameTable]
+  val users = TableQuery[UsersTable]
+
+  /* Récupère la partie en cours d'un utilisateur */
+  def getCurrentGameOfUser(userId: Long): Future[Option[Game]] =
+    db.run(games.filter(_.userId === userId).filter(_.isOver === false).result.headOption)
+
+
+  /* Récupère les parties terminées d'un utilisateur */
+  def getAllGameOfUser(userId: Long): Future[Seq[Game]] = {
+    val query = games.filter(_.userId === userId).sortBy(_.date)
+    db.run(query.result)
+  }
 
 }

@@ -26,34 +26,36 @@
 #GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 #Rémi
-POST /signin controllers.UserController.signin
+#POST /signin                        controllers.UserController.signin
 # {"pseudo": Dream, "pwd": Hash}
-POST /signup controllers.UserController.signup
+#POST /signup                        controllers.UserController.signup
 # {"pseudo": Dream, "email": "basile.ch@htomail.ch", "pwd": "1234", "country":switzerland }
-POST /logout controllers.UserController.logout
+#POST /logout                        controllers.UserController.logout
 # Rien
+#POST /statistics/add_friend         controllers.UserController.addFriend
+# {"pseudo":Fanfou}
+
 
 
 # Game requests François
-POST /game/endStage controllers.GameController.endStage
+GET /game/:userId                        controllers.GameController.getGame(userId: Long)
+#POST /game/endStage                 controllers.GameController.endStage
 # {StageClear: true, temps: 12:00, score: 10212, yellowBonusTot: 3, redBonusTot: 4, yellowBonusUsed: 1, redBonusUsed: 0}
-GET /game/nextStage controllers.GameController.nextStage
+#GET /game/nextStage                 controllers.GameController.nextStage
 # { stageLevel: 13, map: [tableua] }
-GET /game/resume controllers.GameController.resume
+#GET /game/resume                    controllers.GameController.resume
 # {score:12101, yellowBonus: 12, redBonus: 2}
 
 
 # Statistics requests Basile
-GET /statisctics/countries controllers.StatisticsController.scoreByCountries
+# GET /statisctics/countries          controllers.StatisticsController.getStatByCountries
 # [{"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }, {{"contry":tiers-monde (france LOL), "nbPlayer": 1, "bestScore": -3 }, ...]
-GET /statisctics/countries/home controllers.StatisticsController.scoreByCountries
-# {"nbPlayer": 3, "bestScore": 12 }
-GET /statisctics/countries/:id controllers.StatisticsController.scoreByCountries
-# {"nbPlayer": 3, "bestScore": 12 }
-GET /statisctics/friends controllers.StatisticsController.friendsLeaderboard
-# [{"name": Fanfou, "bestScore": 12, "maxStage": 10}, ... }
-GET /statisctics/personnal controllers.StatisticsController.personnalStats
-# { "scoreList": [{"score": 12, "date": 12.10.2018}, ...], totYellowBonusUsed:10, totRedBonusUsed:12, bestScore: 19, maxLevel, averagelevel, averageScore}
-POST /statistics/add_friend controllers.UserController.addFriend
-# {"pseudo":Fanfou}
+# GET /statisctics/countries/home     controllers.StatisticsController.getStatFromHomeCountry
+# {"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }
+# GET /statisctics/friends            controllers.StatisticsController.getStatFriends
+# [{"name": Fanfou, "bestScore": 12, "maxLevel": 10}, ... }
+GET /statisctics/personnal          controllers.StatisticsController.getPersonnalStats
+# { "scoreList": [{"score": 12, "date": 12.10.2018}, ...], totYellowBonusUsed:10, totRedBonusUsed:12, bestScore: 19, maxLevel, averageLevel, averageScore}
+
+
 

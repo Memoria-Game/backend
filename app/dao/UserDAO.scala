@@ -42,6 +42,10 @@ class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
     db.run(query.result)
   }
 
+  def getUserName(userId: Long): Future[Option[String]] = {
+    val query = users.filter(_.id === userId).map(u => u.pseudo)
+    db.run(query.result.headOption)
+  }
 
 
 }
