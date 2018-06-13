@@ -54,8 +54,11 @@ GET /game/:userId                        controllers.GameController.getGame(user
 # {"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }
 # GET /statisctics/friends            controllers.StatisticsController.getStatFriends
 # [{"name": Fanfou, "bestScore": 12, "maxLevel": 10}, ... }
-GET /statisctics/personnal          controllers.StatisticsController.getPersonnalStats
-# { "scoreList": [{"score": 12, "date": 12.10.2018}, ...], totYellowBonusUsed:10, totRedBonusUsed:12, bestScore: 19, maxLevel, averageLevel, averageScore}
+GET /statisctics/personnal          controllers.StatisticsController.getPersonalStats
+# {totYellowBonusUsed:10, totRedBonusUsed:12, bestScore: 19, maxLevel, averageLevel, averageScore}
+GET /statisctics/personnalScore     controllers.StatisticsController.getPersonalScores
+# [{"score": 12, "date": 12.10.2018}, ...]
+
 
 
 

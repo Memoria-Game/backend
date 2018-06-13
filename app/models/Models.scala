@@ -54,16 +54,15 @@ case class CountryStat(contryName: String,
 
 case class UserStatisticBrief(userName: String,
                               bestScore: Long,
-                              maxStage: Long)
+                              maxLevel: Long)
 
 case class Score(score: Long,
                  date: Timestamp)
 
-case class PersonalStatistic(scoreList: Seq[Score],
-                             totYellowBonusUsed: Long,
+
+case class PersonalStatistic(totYellowBonusUsed: Long,
                              totRedBonusUsed: Long,
                              bestScore: Long,
                              maxLevel: Long,
                              averageLevel: Long,
                              averageScore: Long)
-

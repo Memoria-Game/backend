@@ -8,7 +8,6 @@ import models._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes._
 import play.api.libs.json._
-import scala.util.{Failure, Success}
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,8 +33,7 @@ class StatisticsController @Inject()(cc: ControllerComponents, gameDAO: GameDAO,
     ) (unlift(Score.unapply))
 
   implicit val PersonalStatToJson: Writes[PersonalStatistic] = (
-    (JsPath \ "scoreList").write[Seq[Score]] and
-      (JsPath \ "totYellowBonusUsed").write[Long] and
+    (JsPath \ "totYellowBonusUsed").write[Long] and
       (JsPath \ "totRedBonusUsed").write[Long] and
       (JsPath \ "bestScore").write[Long] and
       (JsPath \ "maxLevel").write[Long] and
@@ -67,28 +65,27 @@ class StatisticsController @Inject()(cc: ControllerComponents, gameDAO: GameDAO,
     "Message" -> "Pas encore implémenté"
   ))
 
-  def getPersonnalStats = Action.async {
-    val userID = 1
-    val optionalUserStatistic = userStatisticDAO.getAllStatsFromUser(userID)
-    val optionalGame = gameDAO.getAllGameOfUser(userID)
+  def getPersonalStats = Action.async {
+    val userId = 1
 
-    var tes: Seq[Score] = Seq()
-    optionalGame.onComplete {
-      case Success(seq) => tes = seq.map(g => Score(g.score, g.date))
-      case Failure(_) => tes = Seq()
-    }
-
-    optionalUserStatistic.map {
-      case Some(s) => Ok(Json.toJson(userStatToPersonal(s, tes)))
+    userStatisticDAO.getStatsFromUser(userId).map {
+      case Some(stat) => Ok(Json.toJson(userStatToPersonal(stat)))
       case None =>
         // Send back a 404 Not Found HTTP status to the client if the student does not exist.
         NotFound(Json.obj(
           "status" -> "Not Found",
-          "message" -> ("UserStatistic  #" + userID + " not found.")
+          "message" -> ("No stat found?")
         ))
     }
   }
 
-  def userStatToPersonal(us: UserStatistic, scoreList: Seq[Score]): PersonalStatistic =
-    PersonalStatistic(scoreList, us.totYellowBonusUsed, us.totRedBonusUsed, us.bestScore, us.maxLevel, us.averageLevel, us.averageScore)
+  def getPersonalScores = Action.async {
+    val userId = 1
+
+    gameDAO.getAllGameOfUser(userId).map(seq => Ok(Json.toJson(seq.map(g => Score(g.score, g.date)))))
+  }
+
+
+  def userStatToPersonal(us: UserStatistic): PersonalStatistic =
+    PersonalStatistic(us.totYellowBonusUsed, us.totRedBonusUsed, us.bestScore, us.maxLevel, us.averageLevel, us.averageScore)
 }

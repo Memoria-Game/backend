@@ -2,7 +2,7 @@
 package dao
 
 import javax.inject.{Inject, Singleton}
-import models.{UserStatistic, UserStatisticBrief}
+import models.UserStatistic
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 
@@ -49,7 +49,7 @@ class UserStatisticDAO @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
   val userStatistics = TableQuery[UsersStatisticTable]
 
-  def getAllStatsFromUser(userId: Long): Future[Option[UserStatistic]] = {
+  def getStatsFromUser(userId: Long): Future[Option[UserStatistic]] = {
     val query = userStatistics.filter(_.userId === userId)
     db.run(query.result.headOption)
   }

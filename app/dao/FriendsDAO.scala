@@ -3,7 +3,7 @@ package dao
 import java.sql.Timestamp
 
 import javax.inject.{Inject, Singleton}
-import models.Friends
+import models.{Friends, UserStatisticBrief}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 
@@ -35,8 +35,32 @@ trait FriendsComponent {
 // configuration file.
 @Singleton
 class FriendsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
-  extends FriendsComponent with HasDatabaseConfigProvider[JdbcProfile] {
+  extends FriendsComponent with UserComponent with UserStatisticComponent with HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api._
+
+  val friends = TableQuery[FriendsTable]
+  val users = TableQuery[UsersTable]
+  val statistics = TableQuery[UsersStatisticTable]
+
+  def getFriendsId(): Future[Seq[Long]] = {
+    val userId: Long = 1
+    val query = friends.filter(f => f.idUser1 === userId)
+    db.run(query.result)
+  }
+
+  def getFriendsStats(): Future[Seq[UserStatisticBrief]] = {
+
+    val userId: Long = 1
+
+    val query = for {
+      friend <- friends.filter(f => f.idUser1 === userId).map
+      user <- users.filter(_.id === friend).map(_.pseudo)
+      friendStat <- statistics.filter(_.userId === friend)
+    } yield (user, friendStat.bestScore, friendStat.maxLevel)
+
+    db.run(query.result).map(seq => seq.map(item => UserStatisticBrief(item._1, item._2, item._3)))
+  }
+
 
 
 }
