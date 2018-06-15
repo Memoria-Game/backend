@@ -2,7 +2,7 @@ package controllers
 
 import java.sql.Timestamp
 
-import dao.{GameDAO, UserDAO, UserStatisticDAO}
+import dao.{FriendsDAO, GameDAO, UserDAO, UserStatisticDAO}
 import javax.inject._
 import models._
 import play.api.libs.functional.syntax._
@@ -13,7 +13,7 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class StatisticsController @Inject()(cc: ControllerComponents, gameDAO: GameDAO, userDAO: UserDAO, userStatisticDAO: UserStatisticDAO) extends AbstractController(cc) {
+class StatisticsController @Inject()(cc: ControllerComponents, friendsDATO: FriendsDAO, gameDAO: GameDAO, userDAO: UserDAO, userStatisticDAO: UserStatisticDAO) extends AbstractController(cc) {
 
   implicit val CountryStatToJson: Writes[CountryStat] = (
     (JsPath \ "contryName").write[String] and
@@ -21,7 +21,7 @@ class StatisticsController @Inject()(cc: ControllerComponents, gameDAO: GameDAO,
       (JsPath \ "bestScore").write[Long]
     ) (unlift(CountryStat.unapply))
 
-  implicit val UserStatToJson: Writes[UserStatisticBrief] = (
+  implicit val UserStatisticBriefToJson: Writes[UserStatisticBrief] = (
     (JsPath \ "userName").write[String] and
       (JsPath \ "bestScore").write[Long] and
       (JsPath \ "maxLevel").write[Long]
@@ -55,12 +55,17 @@ class StatisticsController @Inject()(cc: ControllerComponents, gameDAO: GameDAO,
     ))
 
 
-  def getStatFromHomeCountry = NotImplemented(Json.obj(
-    "status" -> "NotImplemented",
-    "Message" -> "Pas encore implémenté"
-  ))
+  def getStatFromHomeCountry = {
+    val userId = 1
+    val friendsStats = friendsDATO.getFriendsStats(userId)
 
-  def getStatFriends = NotImplemented(Json.obj(
+    friendsStats.map(seq => OK(Json.toJson(seq)))
+  }
+
+
+  def getStatFriends =
+
+    NotImplemented(Json.obj(
     "status" -> "NotImplemented",
     "Message" -> "Pas encore implémenté"
   ))
@@ -70,9 +75,7 @@ class StatisticsController @Inject()(cc: ControllerComponents, gameDAO: GameDAO,
 
     userStatisticDAO.getStatsFromUser(userId).map {
       case Some(stat) => Ok(Json.toJson(userStatToPersonal(stat)))
-      case None =>
-        // Send back a 404 Not Found HTTP status to the client if the student does not exist.
-        NotFound(Json.obj(
+      case None => NotFound(Json.obj(
           "status" -> "Not Found",
           "message" -> ("No stat found?")
         ))

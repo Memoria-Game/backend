@@ -48,7 +48,7 @@ case class UserStatistic(idStat: Option[Long],
                          userId: Long)
 
 
-case class CountryStat(contryName: String,
+case class CountryStat(countryName: String,
                        nbPlayer: Long,
                        bestScore: Long)
 

@@ -52,7 +52,7 @@ GET /game/:userId                        controllers.GameController.getGame(user
 # [{"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }, {{"contry":tiers-monde (france LOL), "nbPlayer": 1, "bestScore": -3 }, ...]
 # GET /statisctics/countries/home     controllers.StatisticsController.getStatFromHomeCountry
 # {"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }
-# GET /statisctics/friends            controllers.StatisticsController.getStatFriends
+GET /statisctics/friends            controllers.StatisticsController.getStatFriends
 # [{"name": Fanfou, "bestScore": 12, "maxLevel": 10}, ... }
 GET /statisctics/personnal          controllers.StatisticsController.getPersonalStats
 # {totYellowBonusUsed:10, totRedBonusUsed:12, bestScore: 19, maxLevel, averageLevel, averageScore}
