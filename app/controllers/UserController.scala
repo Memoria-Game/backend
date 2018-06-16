@@ -1,6 +1,6 @@
 package controllers
 
-import dao.{UserDAO}
+import dao.UserDAO
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.libs.functional.syntax._
@@ -8,11 +8,15 @@ import play.api.libs.json.Reads._
 import play.api.libs.json.Writes._
 import play.api.libs.json._
 import play.api.mvc.{AbstractController, ControllerComponents}
+import services.ConnexionService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO) extends AbstractController(cc) {
+class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO, cs:ConnexionService) extends AbstractController(cc) {
+  def validateJson[A : Reads] = parse.json.validate(
+    _.validate[A].asEither.left.map(e => BadRequest(JsError.toJson(e)))
+  )
 
   implicit val gamToJson: Writes[User] = (
     (JsPath \ "idUser").write[Option[Long]] and
@@ -22,17 +26,60 @@ class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO) exten
       (JsPath \ "country").write[String]
     ) (unlift(User.unapply))
 
-  def welcome = Action.async {
-    val users = userDAO.list
-
-    users.map(u => Ok(Json.toJson(u)))
+  def welcome = Action.async { request =>
+    cs.getUser(request).map(_ match {
+      case None => Unauthorized("T'es pas connecté, idiot")
+      case Some(u) => Ok("Salut mon brave " + u.pseudo + " !")
+    })
   }
 
-  def signin = ???
 
-  def signup = ???
+  case class Signin(pseudo: String,
+                    pwd: String)
+  implicit val jsonToSignin:Reads[Signin] = (
+    (JsPath \ "pseudo").read[String] and
+      (JsPath \ "pwd").read[String]
+    ) (Signin.apply _)
 
-  def logout = ???
+  def signin = Action.async(validateJson[Signin]) { request =>
+    val s = request.body
+    cs.signin(s.pseudo, s.pwd).map(_ match {
+      case None => Forbidden("Nom d'utilisateur ou mot de passe incorrecte")
+      case Some(u) => Ok("Vous êtes bien connecté " + u.pseudo).withSession(request.session + ("user_id" -> u.id.get.toString))
+    })
+  }
+  /*
+  def signin = Action.async { request =>
+    cs.connect()
+    cs.isAllowed(request).map(_ match {
+      case false => Unauthorized("")
+      case true => Ok("").withSession(request.session + ("connected" -> ""))
+    })
+  }//
+  */
+
+  // {"pseudo": Dream, "email": "basile.ch@htomail.ch", "pwd": "1234", "country":switzerland }
+  case class Signup(pseudo: String,
+                  email: String,
+                    pwd: String,
+                  country: String)
+  implicit val jsonToSignup:Reads[Signup] = (
+    (JsPath \ "pseudo").read[String] and
+    (JsPath \ "email").read[String] and
+    (JsPath \ "pwd").read[String] and
+    (JsPath \ "country").read[String]
+  ) (Signup.apply _)
+  def signup = Action.async(validateJson[Signup]) { request =>
+    val s = request.body
+    cs.signup(s.pseudo, s.pwd, s.email, s.country).map(_ match {
+      case None => Forbidden("Cet utilisateur existe déjà")
+      case Some(u) => Ok("Bienvenue" + u.pseudo).withSession(request.session + ("user_id" -> u.id.get.toString))
+    })
+  }
+
+  def logout = Action {
+    Ok("Bien déconnecté").withNewSession
+  }
 
   def addFriend = ???
 

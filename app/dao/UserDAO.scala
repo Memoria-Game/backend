@@ -42,10 +42,31 @@ class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
     db.run(query.result)
   }
 
-  def getUserName(userId: Long): Future[Option[String]] = {
+  def getUsername(userId: Long): Future[Option[String]] = {
     val query = users.filter(_.id === userId).map(u => u.pseudo)
     db.run(query.result.headOption)
   }
 
+  def signup(username:String, password:String, mail:String, country:String):Future[User] = {
+    val u = User(None, username, mail, password,country)
+
+    val insertQuery = users returning users.map(_.id) into ((u, id) => u.copy(Some(id)))
+    db.run(insertQuery += u)
+  }
+
+  def getUser(username:String): Future[Option[User]] = {
+    val query = users.filter(_.pseudo === username)
+    db.run(query.result.headOption)
+  }
+
+  def getUser(username:String, password:String):Future[Option[User]] = {
+    val query = users.filter(_.pseudo === username).filter(_.password === password)
+    db.run(query.result.headOption)
+  }
+
+  def getUser(id:Long):Future[Option[User]] = {
+    val query = users.filter(_.id === id)
+    db.run(query.result.headOption)
+  }
 
 }
