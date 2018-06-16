@@ -4,7 +4,7 @@
 # ~~~~
 
 ## Pages
-#GET     /                            controllers.UserController.welcome
+GET     /                            controllers.UserController.welcome
 #+nocsrf # the "nocsrf" modifier tag is used to disable the CSRF filter for the following route in order to avoid an "Unauthorized" error
 #POST    /                           controllers.HomeController.postStudent
 #GET     /about                      controllers.HomeController.about
@@ -26,11 +26,11 @@
 #GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 #Rémi
-#POST /signin                        controllers.UserController.signin
+POST /signin                        controllers.UserController.signin
 # {"pseudo": Dream, "pwd": Hash}
-#POST /signup                        controllers.UserController.signup
+POST /signup                        controllers.UserController.signup
 # {"pseudo": Dream, "email": "basile.ch@htomail.ch", "pwd": "1234", "country":switzerland }
-#POST /logout                        controllers.UserController.logout
+GET /logout                        controllers.UserController.logout
 # Rien
 #POST /statistics/add_friend         controllers.UserController.addFriend
 # {"pseudo":Fanfou}
@@ -51,6 +51,7 @@ GET /game/resume                        controllers.GameController.resume
 # Statistics requests
 # GET /statisctics/countries            controllers.StatisticController.getStatByCountries
 # [{"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }, {{"contry":tiers-monde (france LOL), "nbPlayer": 1, "bestScore": -3 }, ...]
+
 # GET /statisctics/countries/home       controllers.StatisticController.getStatFromHomeCountry
 # {"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }
 # GET /statisctics/friends              controllers.StatisticController.getStatFriends
