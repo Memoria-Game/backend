@@ -21,6 +21,14 @@ case class Stage(levelNumber: Option[Long],
                  nbOfCols: Int,
                  timeOfDisplay: Double)
 
+case class StageOver(stageClear: Boolean,
+                     temps: Long,
+                     score: Long,
+                     yellowBonusTot: Long,
+                     redBonusTot: Long,
+                     yellowBonusUsed: Long,
+                     redBonusUsed: Long)
+
 case class StageGame(idGame: Option[Long],
                      idStage: Option[Long],
                      scoreStage: Long,
@@ -34,9 +42,10 @@ case class Game(idGame: Option[Long],
                 score: Long,
                 date: Timestamp,
                 isOver: Boolean,
-                nbLifes: Long,
                 nbYellowBonus: Long,
-                userId: Long)
+                nbRedBonus: Long,
+                userId: Long,
+                actualStage: Long)
 
 case class UserStatistic(idStat: Option[Long],
                          totYellowBonusUsed: Long,
@@ -66,3 +75,10 @@ case class PersonalStatistic(totYellowBonusUsed: Long,
                              maxLevel: Long,
                              averageLevel: Long,
                              averageScore: Long)
+
+case class NextStage(stageLevel: Long,
+                     map: Array[Array[Int]])
+
+case class ResumeGame(score: Long,
+                      yellowBonus: Long,
+                      redBonus: Long)

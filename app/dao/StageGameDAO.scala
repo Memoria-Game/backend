@@ -37,11 +37,32 @@ trait StageGameComponent {
 // driver. The class extends the students' query table and loads the JDBC profile configured in the application's
 // configuration file.
 @Singleton
-class GameStageDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
+class StageGameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
   extends StageGameComponent with HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api._
 
   // Get the object-oriented list of students directly from the query table.
   // val students = TableQuery[StageGame]
+
+
+  val stagesGames = TableQuery[StageGameTable]
+
+  def createStageGame(idGame: Long, idStage: Long): Future[Int] = {
+    val insertQuery = stagesGames.map(x => (x.idGame, x.idStage)) += (idGame, idStage)
+
+    db.run(insertQuery)
+  }
+
+  def getStageGame(idGame: Long, idStage: Long): Future[StageGame] = {
+    val insertQuery = stagesGames.filter(x => x.idGame === idGame && x.idStage === idStage)
+
+    db.run(insertQuery.result.head)
+  }
+
+  def updateStageGame(stageGame: StageGame): Future[Int] = {
+    val updateQuery = stagesGames.filter(st => (st.idGame === stageGame.idGame && st.idStage === stageGame.idStage)).update(stageGame)
+
+    db.run(updateQuery)
+  }
 
 }

@@ -1,6 +1,7 @@
 package dao
 
 import java.sql.Timestamp
+import java.time.LocalDateTime
 
 import javax.inject.{Inject, Singleton}
 import models.Game
@@ -17,21 +18,24 @@ trait GameComponent {
 
   // This class convert the database's courses table in a object-oriented entity: the Course model.
   class GameTable(tag: Tag) extends Table[Game](tag, "GAME") {
-    def id = column[Long]("IDGAME", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
+    def idGame = column[Long]("IDGAME", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
+
     def score = column[Long]("SCORE")
 
     def date = column[Timestamp]("DATE")
 
     def isOver = column[Boolean]("ISOVER")
 
-    def nbLifes = column[Long]("NBLIFES")
-
     def nbYellowBonus = column[Long]("NBYELLOWBONUS")
+
+    def nbRedBonus = column[Long]("NBREDBONUS")
 
     def userId = column[Long]("USERID")
 
+    def actualStage = column[Long]("ACTUALSTAGE")
+
     // Map the attributes with the model; the ID is optional.
-    def * = (id.?, score, date, isOver, nbLifes, nbYellowBonus, userId) <> (Game.tupled, Game.unapply)
+    def * = (idGame.?, score, date, isOver, nbYellowBonus, nbRedBonus, userId, actualStage) <> (Game.tupled, Game.unapply)
   }
 
 }
@@ -50,13 +54,45 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
   val users = TableQuery[UsersTable]
 
   /* Récupère la partie en cours d'un utilisateur */
-  def getCurrentGameOfUser(userId: Long): Future[Option[Game]] =
-    db.run(games.filter(_.userId === userId).filter(_.isOver === false).result.headOption)
+  def getCurrentGameOfUser(userId: Long): Future[Option[Game]] = {
+    val query =games.filter(_.userId === userId).filter(_.isOver === false)
 
+    db.run(query.result.headOption)
+  }
 
   /* Récupère les parties terminées d'un utilisateur */
   def getAllGameOfUser(userId: Long): Future[Seq[Game]] = {
     val query = games.filter(_.userId === userId).sortBy(_.date)
     db.run(query.result)
   }
+
+  def getNumberOfGameOfUser(userId: Long): Future[Int] =
+    getAllGameOfUser(userId).map(_.length)
+
+  def createGame(userId: Long): Future[Game] = {
+    val g = Game(None, 0, Timestamp.valueOf(LocalDateTime.now()), false, 0, 0, userId, 0)
+    val insertQuery = games returning games.map(_.idGame) into ((g, idGame) => g.copy(Some(idGame))) += g
+
+    db.run(insertQuery)
+  }
+
+  def updateGame(game: Game): Future[Int] = {
+    val updateQuery = games.filter(_.idGame === game.idGame).update(game)
+
+    db.run(updateQuery)
+  }
+
+  def gameOver(gameId: Long) = {
+    val updateQuery = games.filter(_.idGame === gameId).map(_.isOver).update(true)
+
+    db.run(updateQuery)
+  }
+
+  def updateActualStage(gameId: Long, newActualLevel: Long) = {
+    val updateQuery = games.filter(_.idGame === gameId).map(_.actualStage).update(newActualLevel)
+
+    db.run(updateQuery)
+  }
+
+
 }

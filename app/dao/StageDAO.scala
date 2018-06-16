@@ -33,4 +33,11 @@ class StageDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends StageComponent with HasDatabaseConfigProvider[JdbcProfile] {
   import profile.api._
 
+  val stages = TableQuery[StageTable]
+
+  def getStage(idStage: Long): Future[Stage] = {
+    val query = stages.filter(_.levelNumber === idStage)
+
+    db.run(query.result.head)
+  }
 }

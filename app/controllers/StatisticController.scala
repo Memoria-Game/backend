@@ -13,7 +13,7 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class StatisticsController @Inject()(cc: ControllerComponents, friendsDATO: FriendsDAO, gameDAO: GameDAO, userDAO: UserDAO, userStatisticDAO: UserStatisticDAO) extends AbstractController(cc) {
+class StatisticController @Inject()(cc: ControllerComponents, friendsDATO: FriendsDAO, gameDAO: GameDAO, userDAO: UserDAO, userStatisticDAO: UserStatisticDAO) extends AbstractController(cc) {
 
   implicit val CountryStatToJson: Writes[CountryStat] = (
     (JsPath \ "contryName").write[String] and
@@ -48,7 +48,7 @@ class StatisticsController @Inject()(cc: ControllerComponents, friendsDATO: Frie
     ))
   }
 
-  def getStatByCountry(contryId: Long) =
+  def getStatByCountry(countryId: Long) =
     NotImplemented(Json.obj(
       "status" -> "NotImplemented",
       "Message" -> "Pas encore implémenté"
@@ -59,27 +59,24 @@ class StatisticsController @Inject()(cc: ControllerComponents, friendsDATO: Frie
     val userId = 1
     val friendsStats = friendsDATO.getFriendsStats(userId)
 
-    friendsStats.map(seq => OK(Json.toJson(seq)))
+    friendsStats.map(s => Ok(Json.toJson(s)))
   }
 
 
   def getStatFriends =
 
     NotImplemented(Json.obj(
-    "status" -> "NotImplemented",
-    "Message" -> "Pas encore implémenté"
-  ))
+      "status" -> "NotImplemented",
+      "Message" -> "Pas encore implémenté"
+    ))
 
   def getPersonalStats = Action.async {
     val userId = 1
 
-    userStatisticDAO.getStatsFromUser(userId).map {
-      case Some(stat) => Ok(Json.toJson(userStatToPersonal(stat)))
-      case None => NotFound(Json.obj(
-          "status" -> "Not Found",
-          "message" -> ("No stat found?")
-        ))
-    }
+    userStatisticDAO.getStatsFromUser(userId)
+      .map(us => userStatToPersonal(us))
+      .map(ps => Ok(Json.toJson(ps)))
+
   }
 
   def getPersonalScores = Action.async {

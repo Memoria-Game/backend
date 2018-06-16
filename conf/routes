@@ -37,26 +37,27 @@
 
 
 
-# Game requests François
-GET /game/:userId                        controllers.GameController.getGame(userId: Long)
-#POST /game/endStage                 controllers.GameController.endStage
+# Game requests
+POST /game/endStage                     controllers.GameController.endStage
 # {StageClear: true, temps: 12:00, score: 10212, yellowBonusTot: 3, redBonusTot: 4, yellowBonusUsed: 1, redBonusUsed: 0}
-#GET /game/nextStage                 controllers.GameController.nextStage
+GET /game/user/:userId                  controllers.GameController.getGame(userId: Long)
+# [{idGame: 1, score: 123, date: Timestamp, isOver: fasle, nbYellowBonus: 1, nbRedBonus: 1, userId: 1, actualStage: Long }
+GET /game/nextStage                     controllers.GameController.nextStage
 # { stageLevel: 13, map: [tableua] }
-#GET /game/resume                    controllers.GameController.resume
+GET /game/resume                        controllers.GameController.resume
 # {score:12101, yellowBonus: 12, redBonus: 2}
 
 
-# Statistics requests Basile
-# GET /statisctics/countries          controllers.StatisticsController.getStatByCountries
+# Statistics requests
+# GET /statisctics/countries            controllers.StatisticController.getStatByCountries
 # [{"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }, {{"contry":tiers-monde (france LOL), "nbPlayer": 1, "bestScore": -3 }, ...]
-# GET /statisctics/countries/home     controllers.StatisticsController.getStatFromHomeCountry
+# GET /statisctics/countries/home       controllers.StatisticController.getStatFromHomeCountry
 # {"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }
-GET /statisctics/friends            controllers.StatisticsController.getStatFriends
+# GET /statisctics/friends              controllers.StatisticController.getStatFriends
 # [{"name": Fanfou, "bestScore": 12, "maxLevel": 10}, ... }
-GET /statisctics/personnal          controllers.StatisticsController.getPersonalStats
+GET /statisctics/personnal              controllers.StatisticController.getPersonalStats
 # {totYellowBonusUsed:10, totRedBonusUsed:12, bestScore: 19, maxLevel, averageLevel, averageScore}
-GET /statisctics/personnalScore     controllers.StatisticsController.getPersonalScores
+GET /statisctics/personnalScore         controllers.StatisticController.getPersonalScores
 # [{"score": 12, "date": 12.10.2018}, ...]
 
 
