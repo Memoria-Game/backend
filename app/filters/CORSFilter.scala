@@ -13,7 +13,8 @@ class CORSFilter @Inject()(implicit val mat: Materializer, ec: ExecutionContext,
   def apply(nextFilter: RequestHeader => Future[Result])
            (requestHeader: RequestHeader): Future[Result] = {
 
-    nextFilter(requestHeader).map(_.withHeaders(HeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN -> requestHeader.headers.get("Origin").get))
+    nextFilter(requestHeader).map(_.withHeaders(HeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN -> requestHeader.headers.get("Origin").get,
+      HeaderNames.ACCESS_CONTROL_ALLOW_CREDENTIALS -> "true"))
 
   }
 }
