@@ -2,8 +2,9 @@
 Basile Châtillon, Rémi Jacquemard, François Quellec
 
 # Description
-Ce jeu a été mis en ligne. Hébergé sur github pages, il est disponible à l'adresse http://memoria.cf/. 
+Ce jeu a été mis en ligne. Hébergé sur github pages, il est disponible à l'adresse http://memoria.cf/.
 Le backend a été déployé sur Heroku. Les requêtes REST peuvent être effectuées sur http://api.memoria.cf/.
+Les deux repos associés sont disponibles sur github à l'adresse suivante: https://github.com/Memoria-Game.
 
 ## Objectif
 Dans le cadre du cours Scala enseigné à la Heig-vd, nous allons implémenter un jeu de type "casse-tête" à l’aide du Play framework, slick et un front-end en utilisant bootstrap pour le design et Javascript. Les objectifs sont les suivants : 
