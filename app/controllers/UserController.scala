@@ -27,10 +27,18 @@ class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO, cs:Co
     ) (unlift(User.unapply))
 
   def welcome = Action.async { request =>
+    cs.getUser(request).map(u => Ok("Salut mon brave " + u.get.pseudo + " !"))
+    //cs.checkUser(request, u => Ok("Salut mon brave " + u.pseudo + " !"))
+
+    //cs.checkUser(request, t => t.map( u => Ok("Salut mon brave " + u.pseudo + " !")))
+
+    //cs.checkUser(request, u => Ok("Salut mon brave " + u.pseudo + " !"))
+
+    /*
     cs.getUser(request).map(_ match {
       case None => Unauthorized("T'es pas connecté, idiot")
-      case Some(u) => Ok("Salut mon brave " + u.pseudo + " !")
-    })
+      case Some(u) =>
+    })*/
   }
 
 

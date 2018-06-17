@@ -9,11 +9,10 @@ import dao.UserDAO
 import java.util.Base64
 import java.nio.charset.StandardCharsets
 
-import play.api.mvc.Request
+import play.api.mvc.{Request, Result, Results}
 import play.libs.concurrent.Futures
 
 import scala.concurrent.Future
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
@@ -24,6 +23,7 @@ class ConnexionService @Inject()(ud:UserDAO) {
   def getUser(implicit request: Request[_]):Future[Option[User]] = getUser(request.session.get("user_id").getOrElse("-1").toLong)
   def getUser(username:String):Future[Option[User]] = ud.getUser(username)
   def getUser(id:Long):Future[Option[User]] = ud.getUser(id)
+  def getUserId(implicit request: Request[_]) = request.session.get("user_id").get.toLong
 
   def exists(username:String):Future[Boolean] = {
     ud.getUser(username).map(_.nonEmpty)
@@ -36,6 +36,14 @@ class ConnexionService @Inject()(ud:UserDAO) {
     })
   }
 
+
+  /*
+  def checkUser(implicit request: Request[_], func:Future[User] => Result):Future[Result] = {
+    getUser(request).map(_ match {
+      case None => Results.Unauthorized("T'es pas connecté, idiot")
+      case Some(u) => func(_)
+    })
+  }*/
 
   def isAllowed(implicit request: Request[_]) = {
     request.session.get("user_id").nonEmpty
