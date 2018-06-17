@@ -1,15 +1,16 @@
 package services
 
-import dao.{FriendsDAO, UserDAO}
+import dao.{FriendsDAO, UserDAO, UserStatisticDAO}
 import javax.inject.Inject
 import models.User
 import play.api.mvc.Request
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 
-class ConnexionService @Inject()(ud: UserDAO, friendsDAO: FriendsDAO) {
+class ConnexionService @Inject()(ud: UserDAO, friendsDAO: FriendsDAO, statisticDAO: UserStatisticDAO) {
 
   def signin(username: String, password: String): Future[Option[User]] = ud.getUser(username, password)
 
@@ -30,7 +31,12 @@ class ConnexionService @Inject()(ud: UserDAO, friendsDAO: FriendsDAO) {
       case true => Future {
         None
       }
-      case false => ud.signup(username, password, mail, country).map(Some(_))
+      case false => {
+        val OptionalUser = ud.insertUser(username, password, mail, country).map(Some(_))
+        val user = Await.result(OptionalUser, Duration.Inf)
+        statisticDAO.createUserStat(user.get.id.get)
+        OptionalUser
+      }
     })
   }
 
