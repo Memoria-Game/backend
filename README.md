@@ -65,7 +65,7 @@ L'application est structurée ainsi:
 Afin de faire persister les données, une base de donnée a été créée, interfacée à l'aide de Slick.
 ![bdd](imgs/bdd.png "Structure de l'application")
 
-Il faudra noter que celle-ci a légèrement différer par rapport à ce qui avait été décrit dans le cahier des charges. Par exemple, concernant les statistiques, il a semblé meilleur d'ajouter une table *statistics* afin de faciliter et rendre plus claires certaines requêtes.
+Il faudra noter que celle-ci a légèrement différé par rapport à ce qui avait été décrit dans le cahier des charges. Par exemple, concernant les statistiques, il a semblé meilleur d'ajouter une table *statistics* afin de faciliter et rendre plus claires certaines requêtes.
 
 ### Gestions d'utilisateurs
 Un système de compte utilisateur a été mis en place. Il est possible de créer un compte, se connecter et se déconnecter à l'aide des endpoints REST suivant:
