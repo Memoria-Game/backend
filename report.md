@@ -114,12 +114,10 @@ Concernant les statistiques, l'utilisateur, lorsqu'il arrive sur la page associ�
 # Problèmes rencontrés
 On trouvera ci-après une liste de quelques problèmes qui ont été rencontré lors de la réalisation de ce projet.
 
-La gestion des *Future* de scala a été difficile d'accès. En effet, il a été difficile de comprendre comment bien les utiliser, ce qui a pris un certain temps. Aussi, le même problème a été rencontré avec les *Option*. La combinaison des deux *Future[Option[T]]* était aussi difficile à gérer.
+La gestion des *Future* de scala a été difficile d'accès. En effet, il a été difficile de comprendre comment bien les utiliser, ce qui a pris un certain temps. Aussi, le même problème a été rencontré avec les *Option*. La combinaison des deux *Future[Option[T]]* rendait le tout encore plus compliqué.
 
-Dans les DAO, les contraintes n'étaient pas mappées. On aurait aussi pu penser que, comme par exemple avec Hybernate, il aurait pu être possible de récupérer toutes les Game d'un joueur sans devoir effectuer de *join* manuel.
+Dans les DAO, les contraintes n'étaient pas mappées. On aurait aussi pu penser que, comme par exemple avec Hibernate, il aurait pu être possible de récupérer toutes les parties d'un joueur sans devoir effectuer de *join* manuel. Aussi, les requêtes pour accéder/modifier/insérer en base de donnée ne sont pas toujours évidentes à définir.
 
-Il nous manquait aussi certaines connaissance pour bien comprendres la méthodes des Action.async / Action
+Il nous manquait aussi certaines connaissances pour bien comprendre la méthodes des Actions et leurs version asynchrones Action.async.
 
-La création des requêtes pour accéder/modifier/insérer en base de donnée ne sont pas toujours évidentes à définir.
-
-En conclusion, il y a beaucoup de chose intéressante dans Slick et Scala Play. Cependant, il aurait été idéal d'avoir effectué un labo concernant ces technologiques avant l'exécution du projet, afin d'avoir une meilleure idée de comment implémenter le tout de manière propre.
+En conclusion, beaucoup de choses sont intéressantes dans Slick et Scala Play. Cependant, il aurait été idéal d'avoir effectué dans un premier temps un labo concernant ces technologiques, afin d'avoir une meilleure idée de comment implémenter le tout, et ce de manière propre.
