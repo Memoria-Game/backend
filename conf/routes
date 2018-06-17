@@ -32,7 +32,7 @@ POST /signup                        controllers.UserController.signup
 # {"pseudo": Dream, "email": "basile.ch@htomail.ch", "pwd": "1234", "country":switzerland }
 GET /logout                        controllers.UserController.logout
 # Rien
-#POST /statistics/add_friend         controllers.UserController.addFriend
+POST /statistics/add_friend         controllers.UserController.addFriend
 # {"pseudo":Fanfou}
 
 
@@ -54,7 +54,7 @@ GET /game/resume                        controllers.GameController.resume
 
 # GET /statisctics/countries/home       controllers.StatisticController.getStatFromHomeCountry
 # {"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }
-# GET /statisctics/friends              controllers.StatisticController.getStatFriends
+GET /statisctics/friends                controllers.StatisticController.getStatFriends
 # [{"name": Fanfou, "bestScore": 12, "maxLevel": 10}, ... }
 GET /statisctics/personnal              controllers.StatisticController.getPersonalStats
 # {totYellowBonusUsed:10, totRedBonusUsed:12, bestScore: 19, maxLevel, averageLevel, averageScore}

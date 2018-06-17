@@ -48,13 +48,19 @@ class FriendsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
     db.run(query.result)
   }
 
+  def addFriend(idUser: Long, idFriend: Long): Future[Int] = {
+    val insertQuery = friends.map(f => (f.idUser1, f.idUser2))
+
+    db.run(insertQuery += (idUser, idFriend))
+  }
+
   def getFriendsStats(userId: Long): Future[Seq[UserStatisticBrief]] = {
 
     val query = for {
       friend <- friends.filter(_.idUser1 === userId).map(_.idUser2)
-      user <- users.filter(_.id === friend).map(_.pseudo)
+      userName <- users.filter(_.id === friend).map(_.pseudo)
       friendStat <- statistics.filter(_.userId === friend)
-    } yield (user, friendStat.bestScore, friendStat.maxLevel)
+    } yield (userName, friendStat.bestScore, friendStat.maxLevel)
 
     db.run(query.result).map(seq => seq.map(item => UserStatisticBrief(item._1, item._2, item._3)))
   }

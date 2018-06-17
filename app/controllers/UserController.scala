@@ -2,7 +2,7 @@ package controllers
 
 import dao.UserDAO
 import javax.inject.{Inject, Singleton}
-import models.User
+import models.{FriendToAdd, SignIn, SignUp, User}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json.Writes._
@@ -13,8 +13,8 @@ import services.ConnexionService
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO, cs:ConnexionService) extends AbstractController(cc) {
-  def validateJson[A : Reads] = parse.json.validate(
+class UserController @Inject()(cc: ControllerComponents, connexionService: ConnexionService, userDAO: UserDAO, cs: ConnexionService) extends AbstractController(cc) {
+  def validateJson[A: Reads] = parse.json.validate(
     _.validate[A].asEither.left.map(e => BadRequest(JsError.toJson(e)))
   )
 
@@ -26,28 +26,39 @@ class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO, cs:Co
       (JsPath \ "country").write[String]
     ) (unlift(User.unapply))
 
+  implicit val jsonToSignIn: Reads[SignIn] = (
+    (JsPath \ "pseudo").read[String] and
+      (JsPath \ "pwd").read[String]
+    ) (SignIn.apply _)
+
+  implicit val jsonToFriendToAdd: Reads[FriendToAdd] = (
+    (__ \ "pseudo").read[String]).map(pseudo => FriendToAdd(pseudo))
+
+  implicit val jsonToSignUp: Reads[SignUp] = (
+    (JsPath \ "pseudo").read[String] and
+      (JsPath \ "email").read[String] and
+      (JsPath \ "pwd").read[String] and
+      (JsPath \ "country").read[String]
+    ) (SignUp.apply _)
+
+
+
   def welcome = Action.async { request =>
     cs.getUser(request).map(_ match {
-      case None => Unauthorized("T'es pas connecté, idiot")
+      case None => Unauthorized("T'es pas connecté")
       case Some(u) => Ok("Salut mon brave " + u.pseudo + " !")
     })
   }
 
 
-  case class Signin(pseudo: String,
-                    pwd: String)
-  implicit val jsonToSignin:Reads[Signin] = (
-    (JsPath \ "pseudo").read[String] and
-      (JsPath \ "pwd").read[String]
-    ) (Signin.apply _)
-
-  def signin = Action.async(validateJson[Signin]) { request =>
+  def signin = Action.async(validateJson[SignIn]) { request =>
     val s = request.body
     cs.signin(s.pseudo, s.pwd).map(_ match {
       case None => Forbidden("Nom d'utilisateur ou mot de passe incorrecte")
       case Some(u) => Ok("Vous êtes bien connecté " + u.pseudo).withSession(request.session + ("user_id" -> u.id.get.toString))
     })
   }
+
   /*
   def signin = Action.async { request =>
     cs.connect()
@@ -59,17 +70,7 @@ class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO, cs:Co
   */
 
   // {"pseudo": Dream, "email": "basile.ch@htomail.ch", "pwd": "1234", "country":switzerland }
-  case class Signup(pseudo: String,
-                  email: String,
-                    pwd: String,
-                  country: String)
-  implicit val jsonToSignup:Reads[Signup] = (
-    (JsPath \ "pseudo").read[String] and
-    (JsPath \ "email").read[String] and
-    (JsPath \ "pwd").read[String] and
-    (JsPath \ "country").read[String]
-  ) (Signup.apply _)
-  def signup = Action.async(validateJson[Signup]) { request =>
+  def signup = Action.async(validateJson[SignUp]) { request =>
     val s = request.body
     cs.signup(s.pseudo, s.pwd, s.email, s.country).map(_ match {
       case None => Forbidden("Cet utilisateur existe déjà")
@@ -81,7 +82,26 @@ class UserController @Inject()(cc: ControllerComponents, userDAO: UserDAO, cs:Co
     Ok("Bien déconnecté").withNewSession
   }
 
-  def addFriend = ???
+  def addFriend = Action.async(validateJson[FriendToAdd]) { request =>
+    val f = request.body
+    val userId = 1
+    val friend = connexionService.getUser(f.pseudo)
+
+    friend.map{
+      case Some(f) => {
+
+        connexionService.addFriend(userId, f.id.get)
+        Ok(Json.obj(
+          "status" -> "Ok",
+          "message" -> ("Add User \"" + f.pseudo + "\" as a friend.")
+        ))
+      }
+      case None => NotFound(Json.obj(
+        "status" -> "Not Found",
+        "message" -> ("User \"" + f.pseudo + "\" not found.")
+      ))
+    }
+  }
 
   /*
   // Refer to the StudentsController class in order to have more explanations.

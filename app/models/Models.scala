@@ -82,3 +82,13 @@ case class NextStage(stageLevel: Long,
 case class ResumeGame(score: Long,
                       yellowBonus: Long,
                       redBonus: Long)
+
+case class FriendToAdd(pseudo: String)
+
+case class SignIn(pseudo: String,
+                  pwd: String)
+
+case class SignUp(pseudo: String,
+                  email: String,
+                  pwd: String,
+                  country: String)

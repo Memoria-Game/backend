@@ -13,7 +13,7 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class StatisticController @Inject()(cc: ControllerComponents, friendsDATO: FriendsDAO, gameDAO: GameDAO, userDAO: UserDAO, userStatisticDAO: UserStatisticDAO) extends AbstractController(cc) {
+class StatisticController @Inject()(cc: ControllerComponents, friendsDAO: FriendsDAO, gameDAO: GameDAO, userDAO: UserDAO, userStatisticDAO: UserStatisticDAO) extends AbstractController(cc) {
 
   implicit val CountryStatToJson: Writes[CountryStat] = (
     (JsPath \ "contryName").write[String] and
@@ -57,18 +57,18 @@ class StatisticController @Inject()(cc: ControllerComponents, friendsDATO: Frien
 
   def getStatFromHomeCountry = {
     val userId = 1
-    val friendsStats = friendsDATO.getFriendsStats(userId)
+    val friendsStats = friendsDAO.getFriendsStats(userId)
 
     friendsStats.map(s => Ok(Json.toJson(s)))
   }
 
 
-  def getStatFriends =
+  def getStatFriends =  Action.async {
+    val userId = 1
+    val friendsStats = friendsDAO.getFriendsStats(userId)
 
-    NotImplemented(Json.obj(
-      "status" -> "NotImplemented",
-      "Message" -> "Pas encore implémenté"
-    ))
+    friendsStats.map{fs => Ok(Json.toJson(fs))}
+  }
 
   def getPersonalStats = Action.async {
     val userId = 1

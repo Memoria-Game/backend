@@ -5,7 +5,7 @@ import java.util.Base64
 import com.google.common.io.BaseEncoding
 import javax.inject.Inject
 import models.User
-import dao.UserDAO
+import dao.{FriendsDAO, UserDAO}
 import java.util.Base64
 import java.nio.charset.StandardCharsets
 
@@ -13,11 +13,10 @@ import play.api.mvc.Request
 import play.libs.concurrent.Futures
 
 import scala.concurrent.Future
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
-class ConnexionService @Inject()(ud:UserDAO) {
+class ConnexionService @Inject()(ud:UserDAO, friendsDAO: FriendsDAO) {
 
   def signin(username:String, password:String):Future[Option[User]] = ud.getUser(username, password)
 
@@ -35,6 +34,9 @@ class ConnexionService @Inject()(ud:UserDAO) {
       case false => ud.signup(username, password, mail, country).map(Some(_))
     })
   }
+
+  def addFriend(userId:Long, friendId: Long) =
+    friendsDAO.addFriend(userId, friendId)
 
 
   def isAllowed(implicit request: Request[_]) = {
