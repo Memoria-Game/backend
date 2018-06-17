@@ -12,7 +12,7 @@ class AuthFilter @Inject()(implicit val mat: Materializer, ec: ExecutionContext,
 
     val authorizedEndpoint = Array("/signin", "/signup")
 
-    requestHeader.session.get("user_id").nonEmpty || authorizedEndpoint.contains(requestHeader.path) match {
+    requestHeader.session.get("user_id").nonEmpty || authorizedEndpoint.contains(requestHeader.path) || requestHeader.method == "OPTION" match {
       case false => Future {
         Results.Unauthorized("You have to be connected to access this page")
       }
