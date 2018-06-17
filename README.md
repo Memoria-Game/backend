@@ -107,4 +107,4 @@ Pour ce qui est du jeu, la librairie *Phaser.js* a été utilisée. Voici les re
 3. le client joue un niveau
 4. une fois le niveau terminé, il en envoie les informations sur le endpoint (/game/endStage). S'il l'a réussi, il passe au niveau suivant (point 2)
 
-Concernant les statistiques, l'utilisateur, lorsqu'il arrive sur la page associée, fait les requêtes nécessaires sur le endpoint "/statistics". Les données ont déjà été mises en forme utilisable facilement par le client sur le serveur. 
+Concernant les statistiques, l'utilisateur, lorsqu'il arrive sur la page associée, fait les requêtes nécessaires sur le endpoint "/statistics". Les données ont déjà été mises en forme et sont utilisables facilement par le client sur le serveur. 
