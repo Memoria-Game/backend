@@ -62,5 +62,7 @@ GET         /statisctics/personnalScore        controllers.StatisticController.g
 # [{"score": 12, "date": 12.10.2018}, ...]
 
 
-
+# CORS
+OPTIONS / controllers.CORSController.rootOptions
+OPTIONS /*url controllers.CORSController.options(url: String)
 
