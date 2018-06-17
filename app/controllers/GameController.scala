@@ -14,7 +14,9 @@ import services.{ConnexionService, GameService, StatisticService}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class GameController @Inject()(cc: ControllerComponents, connexionService: ConnexionService, gameDAO: GameDAO, gameService: GameService, statisticService: StatisticService) extends AbstractController(cc) {
+class GameController @Inject()(cc: ControllerComponents, connexionService: ConnexionService, gameDAO: GameDAO,
+                               gameService: GameService, statisticService: StatisticService)
+  extends AbstractController(cc) {
 
   implicit val NextStageToJson: Writes[NextStage] = (
     (JsPath \ "stageLevel").write[Long] and
@@ -59,14 +61,13 @@ class GameController @Inject()(cc: ControllerComponents, connexionService: Conne
 
   def getGame(userId: Long) = Action.async {
     val optionalGame = gameDAO.getAllGameOfUser(userId)
+
     optionalGame map (s => Ok(Json.toJson(s)))
   }
 
   def endStage = Action.async(validateJson[StageOver]) { request =>
     val stageOver = request.body
-
-    val userId = 1
-    // val optionalGame = Await.result(gameDAO.getCurrentGameOfUser(userId), Duration.Inf)
+    val userId = connexionService.getUserId(request)
     val optionalGame = gameDAO.getCurrentGameOfUser(userId)
 
     optionalGame.map {
@@ -100,8 +101,8 @@ class GameController @Inject()(cc: ControllerComponents, connexionService: Conne
     }
   }
 
-  def nextStage = Action.async {
-    val userId = 1
+  def nextStage = Action.async { request =>
+    val userId = connexionService.getUserId(request)
     val optionalGame = gameDAO.getCurrentGameOfUser(userId)
 
     optionalGame map {
@@ -120,6 +121,7 @@ class GameController @Inject()(cc: ControllerComponents, connexionService: Conne
   def resume = Action.async { implicit request =>
     val userId = connexionService.getUserId(request)
     val optionalGame = gameDAO.getCurrentGameOfUser(userId)
+
     optionalGame.map {
       case Some(g) => {
         val gameResumed: ResumeGame = gameService.getInfoForResume(g)

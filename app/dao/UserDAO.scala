@@ -52,7 +52,7 @@ class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
     db.run(query.result.headOption)
   }
 
-  def signup(username: String, password: String, mail: String, country: String): Future[User] = {
+  def insertUser(username: String, password: String, mail: String, country: String): Future[User] = {
     val u = User(None, username, mail, password, country)
 
     val insertQuery = users returning users.map(_.id) into ((u, id) => u.copy(Some(id)))
@@ -72,6 +72,18 @@ class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
   def getUser(id: Long): Future[Option[User]] = {
     val query = users.filter(_.id === id)
     db.run(query.result.headOption)
+  }
+
+  def getUsersFromCountry(country: String): Future[Seq[User]] = {
+    val query = users.filter(_.country === country)
+
+    db.run(query.result)
+  }
+
+  def getAllUsers(): Future[Seq[User]] = {
+    val query = users
+
+    db.run(query.result)
   }
 
 }

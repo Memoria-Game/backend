@@ -52,7 +52,7 @@ GET         /game/resume                       controllers.GameController.resume
 # GET /statisctics/countries            controllers.StatisticController.getStatByCountries
 # [{"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }, {{"contry":tiers-monde (france LOL), "nbPlayer": 1, "bestScore": -3 }, ...]
 
-# GET /statisctics/countries/home       controllers.StatisticController.getStatFromHomeCountry
+GET         /statisctics/countries/home        controllers.StatisticController.getStatFromHomeCountry
 # {"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }
 GET         /statisctics/friends               controllers.StatisticController.getStatFriends
 # [{"name": Fanfou, "bestScore": 12, "maxLevel": 10}, ... }

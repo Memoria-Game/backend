@@ -51,12 +51,18 @@ class UserStatisticDAO @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
   def getStatsFromUser(userId: Long): Future[UserStatistic] = {
     val query = userStatistics.filter(_.userId === userId)
+
     db.run(query.result.head)
   }
 
   def getAllStats(): Future[Seq[UserStatistic]] =
     db.run(userStatistics.result)
 
+  def createUserStat(userId: Long): Future[Int] = {
+    val insertQuery = userStatistics.map(_.userId)
+
+    db.run(insertQuery += userId)
+  }
 
   def updateStat(userStatistic: UserStatistic): Future[Int] = {
     val updateQuery = userStatistics.filter(_.userId === userStatistic.userId).update(userStatistic)

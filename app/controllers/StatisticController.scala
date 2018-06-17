@@ -9,14 +9,18 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes._
 import play.api.libs.json._
 import play.api.mvc.{AbstractController, ControllerComponents}
+import services.{ConnexionService, StatisticService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class StatisticController @Inject()(cc: ControllerComponents, friendsDAO: FriendsDAO, gameDAO: GameDAO, userDAO: UserDAO, userStatisticDAO: UserStatisticDAO) extends AbstractController(cc) {
+class StatisticController @Inject()(cc: ControllerComponents, connexionService: ConnexionService, friendsDAO: FriendsDAO,
+                                    gameDAO: GameDAO, statisticService: StatisticService, userDAO: UserDAO,
+                                    userStatisticDAO: UserStatisticDAO)
+  extends AbstractController(cc) {
 
   implicit val CountryStatToJson: Writes[CountryStat] = (
-    (JsPath \ "contryName").write[String] and
+    (JsPath \ "countryName").write[String] and
       (JsPath \ "nbPlayer").write[Long] and
       (JsPath \ "bestScore").write[Long]
     ) (unlift(CountryStat.unapply))
@@ -41,37 +45,29 @@ class StatisticController @Inject()(cc: ControllerComponents, friendsDAO: Friend
       (JsPath \ "averageScore").write[Long]
     ) (unlift(PersonalStatistic.unapply))
 
-  def getStatByCountries = {
-    NotImplemented(Json.obj(
-      "status" -> "NotImplemented",
-      "Message" -> "Pas encore implémenté"
-    ))
+
+  def getStatByCountries = Action.async {
+    val countryStat = statisticService.getAllCountryStat
+
+    countryStat map (cs => Ok(Json.toJson(cs)))
   }
 
-  def getStatByCountry(countryId: Long) =
-    NotImplemented(Json.obj(
-      "status" -> "NotImplemented",
-      "Message" -> "Pas encore implémenté"
-    ))
+  def getStatFromHomeCountry = Action.async { request =>
+    val userId = connexionService.getUserId(request)
+    val homeCountryStat = statisticService.getHomeCountryStat(userId)
 
-
-  def getStatFromHomeCountry = {
-    val userId = 1
-    val friendsStats = friendsDAO.getFriendsStats(userId)
-
-    friendsStats.map(s => Ok(Json.toJson(s)))
+    homeCountryStat.map(s => Ok(Json.toJson(s)))
   }
 
-
-  def getStatFriends = Action.async {
-    val userId = 1
+  def getStatFriends = Action.async { request =>
+    val userId = connexionService.getUserId(request)
     val friendsStats = friendsDAO.getFriendsStats(userId)
 
     friendsStats.map { fs => Ok(Json.toJson(fs)) }
   }
 
-  def getPersonalStats = Action.async {
-    val userId = 1
+  def getPersonalStats = Action.async { request =>
+    val userId = connexionService.getUserId(request)
 
     userStatisticDAO.getStatsFromUser(userId)
       .map(us => userStatToPersonal(us))
@@ -79,8 +75,8 @@ class StatisticController @Inject()(cc: ControllerComponents, friendsDAO: Friend
 
   }
 
-  def getPersonalScores = Action.async {
-    val userId = 1
+  def getPersonalScores = Action.async { request =>
+    val userId = connexionService.getUserId(request)
 
     gameDAO.getAllGameOfUser(userId).map(seq => Ok(Json.toJson(seq.map(g => Score(g.score, g.date)))))
   }
