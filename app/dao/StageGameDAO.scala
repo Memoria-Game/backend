@@ -1,7 +1,7 @@
 package dao
 
 import javax.inject.{Inject, Singleton}
-import models.{StageGame}
+import models.StageGame
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 
@@ -18,10 +18,15 @@ trait StageGameComponent {
     def idGame = column[Long]("IDGAME") // Primary key, auto-incremented
     def idStage = column[Long]("IDSTAGE") // Primary key, auto-incremented
     def scoreStage = column[Long]("SCORESTAGE")
+
     def timeAtStage = column[Long]("TIMEATSTAGE")
+
     def redBonusUsed = column[Long]("REDBONUSUSED")
+
     def yellowBonusUsed = column[Long]("YELLOWBONUSUSED")
+
     def redBonusTaken = column[Long]("REDBONUSTAKEN")
+
     def yellowBonusTaken = column[Long]("YELLOWBONUSTAKEN")
 
     def pk = primaryKey("primaryKey", (idGame, idStage))
@@ -29,7 +34,8 @@ trait StageGameComponent {
     // Map the attributes with the model; the ID is optional.
     def * = (idGame.?, idStage.?, scoreStage, timeAtStage, redBonusUsed, yellowBonusUsed, redBonusTaken, redBonusTaken) <> (StageGame.tupled, StageGame.unapply)
 
-   }
+  }
+
 }
 
 // This class contains the object-oriented list of students and offers methods to query the data.
@@ -39,6 +45,7 @@ trait StageGameComponent {
 @Singleton
 class StageGameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
   extends StageGameComponent with HasDatabaseConfigProvider[JdbcProfile] {
+
   import profile.api._
 
   // Get the object-oriented list of students directly from the query table.

@@ -1,10 +1,10 @@
 package utils
 
-class LevelGenerator(nbRows:Int,
-                     nbCols:Int,
-                     nbYellowBonus:Int,
-                     nbRedBonus:Int,
-                     nbWalls:Int) {
+class LevelGenerator(nbRows: Int,
+                     nbCols: Int,
+                     nbYellowBonus: Int,
+                     nbRedBonus: Int,
+                     nbWalls: Int) {
 
   // Define the cells' values possibilities
   private val EMPTY = 0
@@ -14,8 +14,8 @@ class LevelGenerator(nbRows:Int,
   private val ENTRY = 4
   private val EXIT = 5
 
-  private val ENTRY_POINT = (nbRows/2, 0)
-  private val EXIT_POINT = (nbRows/2, nbCols - 1)
+  private val ENTRY_POINT = (nbRows / 2, 0)
+  private val EXIT_POINT = (nbRows / 2, nbCols - 1)
 
 
   // Initialise the level array
@@ -39,7 +39,7 @@ class LevelGenerator(nbRows:Int,
 
     if (!isIn(from) || !isIn(to))
       false
-    else if(from == to)
+    else if (from == to)
       true
     else {
       array(from._1)(from._2) match {
@@ -59,8 +59,8 @@ class LevelGenerator(nbRows:Int,
   // Generate a random Cell of the given type, it makes sure that
   // if the cell is a wall, there is still a path from entry to exit,
   // if the cell is a bonus, there is a path from the entry to the bonus
-  private def generateCells(emptyCells:IndexedSeq[(Int, Int)], number: Int, cellType:Int) : Unit = {
-    if(emptyCells.length > 0) {
+  private def generateCells(emptyCells: IndexedSeq[(Int, Int)], number: Int, cellType: Int): Unit = {
+    if (emptyCells.length > 0) {
       val r = scala.util.Random
       if (number > 0) {
         val elem = emptyCells(r.nextInt(emptyCells.length))
@@ -82,7 +82,7 @@ class LevelGenerator(nbRows:Int,
     var result = for {
       i <- 0 until level.length
       j <- 0 until level(0).length
-    }yield (i, j)
+    } yield (i, j)
     result.filter(x => level(x._1)(x._2) == EMPTY)
   }
 

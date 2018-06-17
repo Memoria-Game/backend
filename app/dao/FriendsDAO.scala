@@ -19,14 +19,16 @@ trait FriendsComponent {
   class FriendsTable(tag: Tag) extends Table[Friends](tag, "FRIENDS") {
     def idUser1 = column[Long]("IDUSER1") // Primary key, auto-incremented
     def idUser2 = column[Long]("IDUSER2")
+
     def friendsSince = column[Timestamp]("FRIENDSSINCE")
 
-    def pk = primaryKey("primaryKey",(idUser1, idUser2))
+    def pk = primaryKey("primaryKey", (idUser1, idUser2))
 
     // Map the attributes with the model; the ID is optional.
     def * = (idUser1.?, idUser2.?, friendsSince) <> (Friends.tupled, Friends.unapply)
 
   }
+
 }
 
 // This class contains the object-oriented list of students and offers methods to query the data.
@@ -36,6 +38,7 @@ trait FriendsComponent {
 @Singleton
 class FriendsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
   extends FriendsComponent with UserComponent with UserStatisticComponent with HasDatabaseConfigProvider[JdbcProfile] {
+
   import profile.api._
 
   val friends = TableQuery[FriendsTable]

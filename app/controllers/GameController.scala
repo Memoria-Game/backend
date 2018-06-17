@@ -14,7 +14,7 @@ import services.{ConnexionService, GameService, StatisticService}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class GameController @Inject()(cc: ControllerComponents,connexionService: ConnexionService, gameDAO: GameDAO, gameService: GameService, statisticService: StatisticService) extends AbstractController(cc) {
+class GameController @Inject()(cc: ControllerComponents, connexionService: ConnexionService, gameDAO: GameDAO, gameService: GameService, statisticService: StatisticService) extends AbstractController(cc) {
 
   implicit val NextStageToJson: Writes[NextStage] = (
     (JsPath \ "stageLevel").write[Long] and

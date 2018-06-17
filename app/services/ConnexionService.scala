@@ -1,42 +1,40 @@
 package services
 
-import java.util.Base64
-
-import com.google.common.io.BaseEncoding
+import dao.{FriendsDAO, UserDAO}
 import javax.inject.Inject
 import models.User
-import dao.{FriendsDAO, UserDAO}
-import java.util.Base64
-import java.nio.charset.StandardCharsets
+import play.api.mvc.Request
 
-import play.api.mvc.{Request, Result, Results}
-import play.libs.concurrent.Futures
-
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
-class ConnexionService @Inject()(ud:UserDAO, friendsDAO: FriendsDAO) {
+class ConnexionService @Inject()(ud: UserDAO, friendsDAO: FriendsDAO) {
 
-  def signin(username:String, password:String):Future[Option[User]] = ud.getUser(username, password)
+  def signin(username: String, password: String): Future[Option[User]] = ud.getUser(username, password)
 
-  def getUser(implicit request: Request[_]):Future[Option[User]] = getUser(request.session.get("user_id").getOrElse("-1").toLong)
-  def getUser(username:String):Future[Option[User]] = ud.getUser(username)
-  def getUser(id:Long):Future[Option[User]] = ud.getUser(id)
+  def getUser(implicit request: Request[_]): Future[Option[User]] = getUser(request.session.get("user_id").getOrElse("-1").toLong)
+
+  def getUser(username: String): Future[Option[User]] = ud.getUser(username)
+
+  def getUser(id: Long): Future[Option[User]] = ud.getUser(id)
+
   def getUserId(implicit request: Request[_]) = request.session.get("user_id").get.toLong
 
-  def exists(username:String):Future[Boolean] = {
+  def exists(username: String): Future[Boolean] = {
     ud.getUser(username).map(_.nonEmpty)
   }
 
-  def signup(username:String, password:String, mail:String, country:String):Future[Option[User]] = {
+  def signup(username: String, password: String, mail: String, country: String): Future[Option[User]] = {
     exists(username).flatMap(_ match {
-      case true => Future{None}
+      case true => Future {
+        None
+      }
       case false => ud.signup(username, password, mail, country).map(Some(_))
     })
   }
 
-  def addFriend(userId:Long, friendId: Long) =
+  def addFriend(userId: Long, friendId: Long) =
     friendsDAO.addFriend(userId, friendId)
 
 
@@ -51,6 +49,7 @@ class ConnexionService @Inject()(ud:UserDAO, friendsDAO: FriendsDAO) {
   def isAllowed(implicit request: Request[_]) = {
     request.session.get("user_id").nonEmpty
   }
+
   /*
   def isAllowed(username:String, password:String):Future[Boolean] = {
     val user = ud.getUser(username)

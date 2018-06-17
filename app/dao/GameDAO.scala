@@ -1,7 +1,6 @@
 package dao
 
 import java.sql.Timestamp
-import java.time.LocalDateTime
 
 import javax.inject.{Inject, Singleton}
 import models.Game
@@ -55,7 +54,7 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
 
   /* Récupère la partie en cours d'un utilisateur */
   def getCurrentGameOfUser(userId: Long): Future[Option[Game]] = {
-    val query =games.filter(_.userId === userId).filter(_.isOver === false)
+    val query = games.filter(_.userId === userId).filter(_.isOver === false)
 
     db.run(query.result.headOption)
   }
@@ -92,6 +91,4 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
 
     db.run(updateQuery)
   }
-
-
 }

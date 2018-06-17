@@ -63,11 +63,11 @@ class StatisticController @Inject()(cc: ControllerComponents, friendsDAO: Friend
   }
 
 
-  def getStatFriends =  Action.async {
+  def getStatFriends = Action.async {
     val userId = 1
     val friendsStats = friendsDAO.getFriendsStats(userId)
 
-    friendsStats.map{fs => Ok(Json.toJson(fs))}
+    friendsStats.map { fs => Ok(Json.toJson(fs)) }
   }
 
   def getPersonalStats = Action.async {
@@ -84,7 +84,6 @@ class StatisticController @Inject()(cc: ControllerComponents, friendsDAO: Friend
 
     gameDAO.getAllGameOfUser(userId).map(seq => Ok(Json.toJson(seq.map(g => Score(g.score, g.date)))))
   }
-
 
   def userStatToPersonal(us: UserStatistic): PersonalStatistic =
     PersonalStatistic(us.totYellowBonusUsed, us.totRedBonusUsed, us.bestScore, us.maxLevel, us.averageLevel, us.averageScore)

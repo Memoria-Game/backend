@@ -1,6 +1,5 @@
 import javax.inject.Inject
-import play.api.http.DefaultHttpFilters
-import play.api.http.EnabledFilters
+import play.api.http.{DefaultHttpFilters, EnabledFilters}
 import play.filters.gzip.GzipFilter
 
 class Filters @Inject()(

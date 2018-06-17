@@ -17,20 +17,27 @@ trait StageComponent {
   class StageTable(tag: Tag) extends Table[Stage](tag, "STAGE") {
     def levelNumber = column[Long]("LEVELNUMBER", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
     def nbOfRedBonus = column[Int]("NBOFREDBONUS")
+
     def nbOfYellowBonus = column[Int]("NBOFYELLOWBONUS")
+
     def nbOfWalls = column[Int]("NBOFWALLS")
+
     def nbOfRows = column[Int]("NBOFROWS")
+
     def nbOfCols = column[Int]("NBOFCOLS")
+
     def timeOfDisplay = column[Double]("TIMEOFDISPLAY")
 
     // Map the attributes with the model; the ID is optional.
     def * = (levelNumber.?, nbOfRedBonus, nbOfYellowBonus, nbOfWalls, nbOfRows, nbOfCols, timeOfDisplay) <> (Stage.tupled, Stage.unapply)
   }
+
 }
 
 @Singleton
 class StageDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit executionContext: ExecutionContext)
   extends StageComponent with HasDatabaseConfigProvider[JdbcProfile] {
+
   import profile.api._
 
   val stages = TableQuery[StageTable]
