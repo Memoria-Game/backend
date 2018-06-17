@@ -118,7 +118,7 @@ class GameController @Inject()(cc: ControllerComponents,connexionService: Connex
   }
 
   def resume = Action.async { implicit request =>
-    val userId = 1
+    val userId = connexionService.getUserId(request)
     val optionalGame = gameDAO.getCurrentGameOfUser(userId)
     optionalGame.map {
       case Some(g) => {
