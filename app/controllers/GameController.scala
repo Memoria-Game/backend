@@ -131,7 +131,7 @@ class GameController @Inject()(cc: ControllerComponents, connexionService: Conne
         Ok(Json.toJson(gameResumed))
       }
       case None => {
-        gameService.createNewGame(userId)
+        gameService.initNewGame(userId)
 
         Ok(Json.toJson(ResumeGame(0, 0, 0)))
       }

@@ -51,7 +51,7 @@ class GameService @Inject()(friendsDATO: FriendsDAO, gameDAO: GameDAO, stageDAO:
 
   def getInfoForResume(g: Game): ResumeGame = ResumeGame(g.score, g.nbYellowBonus, g.nbRedBonus)
 
-  def createNewGame(userId: Long) = {
+  def initNewGame(userId: Long) = {
     gameDAO.createGame(userId)
     val idGame = Await.result(gameDAO.getCurrentGameOfUser(userId), Duration.Inf).get.idGame.get
     stageGameDAO.createStageGame(idGame, 1)
