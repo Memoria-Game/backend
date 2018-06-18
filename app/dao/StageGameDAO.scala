@@ -61,9 +61,9 @@ class StageGameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
   }
 
   def getStageGame(idGame: Long, idStage: Long): Future[StageGame] = {
-    val insertQuery = stagesGames.filter(x => x.idGame === idGame && x.idStage === idStage)
+    val query = stagesGames.filter(x => (x.idGame === idGame && x.idStage === idStage))
 
-    db.run(insertQuery.result.head)
+    db.run(query.result.head)
   }
 
   def updateStageGame(stageGame: StageGame): Future[Int] = {

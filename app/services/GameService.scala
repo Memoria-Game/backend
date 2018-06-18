@@ -34,8 +34,13 @@ class GameService @Inject()(friendsDATO: FriendsDAO, gameDAO: GameDAO, stageDAO:
 
   def endStage(g: Game, so: StageOver) = {
     val optionSG = Await.result(stageGameDAO.getStageGame(g.idGame.get, g.actualStage), Duration.Inf)
-    stageGameDAO.updateStageGame(StageGame(g.idGame,optionSG.idStage, so.score, so.temps, so.redBonusUsed,
-      so.yellowBonusUsed, so.redBonusTot - g.nbRedBonus - so.redBonusUsed,
+    stageGameDAO.updateStageGame(StageGame(g.idGame,
+      optionSG.idStage,
+      so.score,
+      so.temps,
+      so.redBonusUsed,
+      so.yellowBonusUsed,
+      so.redBonusTot - g.nbRedBonus - so.redBonusUsed,
       so.yellowBonusTot - g.nbYellowBonus - so.yellowBonusUsed))
   }
 
@@ -48,7 +53,8 @@ class GameService @Inject()(friendsDATO: FriendsDAO, gameDAO: GameDAO, stageDAO:
 
   def createNewGame(userId: Long) = {
     gameDAO.createGame(userId)
-    stageGameDAO.createStageGame(userId, 1)
+    val idGame = Await.result(gameDAO.getCurrentGameOfUser(userId), Duration.Inf).get.idGame.get
+    stageGameDAO.createStageGame(idGame, 1)
   }
 
   def winGame(u: User) = {
