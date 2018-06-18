@@ -32,10 +32,10 @@ class ConnexionService @Inject()(ud: UserDAO, friendsDAO: FriendsDAO, statisticD
         None
       }
       case false => {
-        val OptionalUser = ud.insertUser(username, password, mail, country).map(Some(_))
+        val OptionalUser = ud.insertUser(username, password, mail, country)
         val user = Await.result(OptionalUser, Duration.Inf)
-        statisticDAO.createUserStat(user.get.id.get)
-        OptionalUser
+        statisticDAO.createUserStat(user.id.get)
+        OptionalUser.map(Some(_))
       }
     })
   }
