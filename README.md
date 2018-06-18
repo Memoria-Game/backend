@@ -13,15 +13,15 @@ Dans le cadre du cours Scala enseigné à la Heig-vd, nous allons implémenter u
 3. Implémenter le front-end de l’applicatif et l’intégrer au projet.
 
 Pour ce faire, les technologies suivantes ont été utilisées:
- - **Backend**: Scala (langage), Scala Play framework (MVC backend), Slick (FRM)
- - **Fontend**: HTML, CSS, Bootstrap, Javascript, MySQL, Phaser.js
+ - **Backend**: Scala (langage), Scala Play framework (MVC backend), Slick (FRM), MySQL
+ - **Fontend**: HTML, CSS, Bootstrap, Javascript, Phaser.js
 
 ## Utilisation 
 L’utilisation de l’applicatif se fait pour le client à partir d’une application web. Une fois la page web visitée, il suffit ensuite au client de se connecter (ou créer un compte). Une fois cette étape achevée, le client peut accéder à ses statistiques, celles de ses amis et au jeu
 
 ## Règles du jeu 
 Les règles du jeu sont les suivantes :
-
+ 
 1. Un damier de cartes s’aﬃche à l’écran. 
 2. Les cartes se retournent pendant 5 secondes. Celles-ci peuvent avoir 3 valeurs, un bonus rouge, un bonus jaune ou une croix. 
 3. Une fois les cartes faces cachées, le joueur peut contrôler un pion avec les ﬂèches du clavier. Il commence à l’extrémité gauche et doit se rendre à l’extrémité droite.
