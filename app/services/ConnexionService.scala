@@ -43,38 +43,8 @@ class ConnexionService @Inject()(ud: UserDAO, friendsDAO: FriendsDAO, statisticD
   def addFriend(userId: Long, friendId: Long) =
     friendsDAO.addFriend(userId, friendId)
 
-
-  /*
-  def checkUser(implicit request: Request[_], func:Future[User] => Result):Future[Result] = {
-    getUser(request).map(_ match {
-      case None => Results.Unauthorized("T'es pas connecté, idiot")
-      case Some(u) => func(_)
-    })
-  }*/
-
   def isAllowed(implicit request: Request[_]) = {
     request.session.get("user_id").nonEmpty
   }
-
-  /*
-  def isAllowed(username:String, password:String):Future[Boolean] = {
-    val user = ud.getUser(username)
-
-    user.map(u => u.map(s => s.password == password).getOrElse(false))
-  }
-  def isAllowed(implicit request: Request[_]):Future[Boolean] = {
-    val auth = getAuth(request)
-    isAllowed(auth._1, auth._2)
-  }
-   def getAuth(implicit request: Request[_]) = {
-    val authArray = request.headers.get("Authorization")
-      .map(Base64.getDecoder.decode(_))
-      .map(new String(_, StandardCharsets.UTF_8))
-      .map(_.split(' ').last)
-      .map(_.split(':'))
-      .get
-
-    (authArray(0), authArray(1))
-  }*/
 
 }

@@ -46,18 +46,6 @@ class UserController @Inject()(cc: ControllerComponents, connexionService: Conne
 
   def welcome = Action.async { request =>
     cs.getUser(request).map(u => Ok("Salut mon brave " + u.get.pseudo + " !"))
-    //cs.checkUser(request, u => Ok("Salut mon brave " + u.pseudo + " !"))
-
-    //cs.checkUser(request, t => t.map( u => Ok("Salut mon brave " + u.pseudo + " !")))
-
-    //cs.checkUser(request, u => Ok("Salut mon brave " + u.pseudo + " !"))
-
-    /*
-    cs.getUser(request).map(_ match {
-
-      case None => Unauthorized("T'es pas connecté, idiot")
-      case Some(u) =>
-    })*/
   }
 
 
@@ -69,16 +57,6 @@ class UserController @Inject()(cc: ControllerComponents, connexionService: Conne
       case Some(u) => Ok("Vous êtes bien connecté " + u.pseudo).withSession(request.session + ("user_id" -> u.id.get.toString))
     })
   }
-
-  /*
-  def signin = Action.async { request =>
-    cs.connect()
-    cs.isAllowed(request).map(_ match {
-      case false => Unauthorized("")
-      case true => Ok("").withSession(request.session + ("connected" -> ""))
-    })
-  }//
-  */
 
   // {"pseudo": Dream, "email": "basile.ch@htomail.ch", "pwd": "1234", "country":switzerland }
   def signup = Action.async(validateJson[SignUp]) { request =>

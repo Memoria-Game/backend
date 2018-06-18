@@ -4,7 +4,7 @@ import javax.inject.Inject
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 
-class CORSController @Inject()(cc: ControllerComponents) extends AbstractController(cc){
+class CORSController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
   def headers = List(
     "Access-Control-Allow-Origin" -> "*",
     "Access-Control-Allow-Methods" -> "GET, POST, OPTIONS, DELETE, PUT",
@@ -14,7 +14,8 @@ class CORSController @Inject()(cc: ControllerComponents) extends AbstractControl
   )
 
   def rootOptions = options("/")
+
   def options(url: String) = Action { request =>
-    NoContent.withHeaders(headers : _*)
+    NoContent.withHeaders(headers: _*)
   }
 }

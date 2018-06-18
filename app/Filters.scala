@@ -8,4 +8,4 @@ class Filters @Inject()(
                          gzip: GzipFilter,
                          log: AuthFilter,
                          cors: CORSFilter
-                       ) extends DefaultHttpFilters(defaultFilters.filters :+ gzip :+ cors :+ log : _*)
+                       ) extends DefaultHttpFilters(defaultFilters.filters :+ gzip :+ cors :+ log: _*)

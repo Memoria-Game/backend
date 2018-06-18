@@ -16,6 +16,7 @@ trait UserComponent {
   // This class convert the database's students table in a object-oriented entity: the Student model.
   class UsersTable(tag: Tag) extends Table[User](tag, "USER") {
     def id = column[Long]("IDUSER", O.PrimaryKey, O.AutoInc) // Primary key, auto-incremented
+    
     def pseudo = column[String]("PSEUDO")
 
     def email = column[String]("EMAIL")

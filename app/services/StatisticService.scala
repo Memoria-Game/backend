@@ -60,8 +60,8 @@ class StatisticService @Inject()(connexionService: ConnexionService, friendsDATO
     userStatisticDAO.updateStat(UserStatistic(Option(us.userId),
       us.totYellowBonusUsed,
       us.totRedBonusUsed,
-      if(g.score > userStat.bestScore) g.score else userStat.bestScore,
-      if(g.actualStage > userStat.maxLevel) g.actualStage else userStat.maxLevel,
+      if (g.score > userStat.bestScore) g.score else userStat.bestScore,
+      if (g.actualStage > userStat.maxLevel) g.actualStage else userStat.maxLevel,
       (us.averageLevel * (totGameUser - 1) + g.actualStage) / totGameUser,
       (us.averageScore * (totGameUser - 1) + g.score) / totGameUser,
       us.userId))

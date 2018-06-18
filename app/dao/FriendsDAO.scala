@@ -28,7 +28,6 @@ trait FriendsComponent {
     def * = (idUser1.?, idUser2.?, friendsSince) <> (Friends.tupled, Friends.unapply)
 
   }
-
 }
 
 // This class contains the object-oriented list of students and offers methods to query the data.

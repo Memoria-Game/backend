@@ -62,7 +62,7 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
   /* Récupère les parties terminées d'un utilisateur */
   def getAllGameDoneOfUser(userId: Long): Future[Seq[Game]] = {
     val query = games.filter(_.userId === userId).filter(_.isOver === true).sortBy(_.date)
-    
+
     db.run(query.result)
   }
 

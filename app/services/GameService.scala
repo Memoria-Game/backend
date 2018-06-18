@@ -56,11 +56,4 @@ class GameService @Inject()(friendsDATO: FriendsDAO, gameDAO: GameDAO, stageDAO:
     stageGameDAO.createStageGame(Await.result(futureGame, Duration.Inf).idGame.get, 1)
   }
 
-  def winGame(u: User) = {
-
-  }
-
-  def looseGame(u: User) = {
-
-  }
 }
