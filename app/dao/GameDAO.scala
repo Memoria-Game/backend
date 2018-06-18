@@ -68,10 +68,19 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
   def getNumberOfGameOfUser(userId: Long): Future[Int] =
     getAllGameOfUser(userId).map(_.length)
 
-  def createGame(userId: Long): Future[Int] = {
-    val insertQuery = games.map(_.userId) += userId
+  def createGame(userId: Long): Future[Game] = {
+    val g = Game(None,
+      0,
+      new Timestamp(System.currentTimeMillis()),
+      false,
+      0,
+      0,
+      userId,
+      1)
 
-    db.run(insertQuery)
+    val insertQuery = games returning games.map(_.idGame) into ((g, idGame) => g.copy(Some(idGame)))
+
+    db.run(insertQuery += g)
   }
 
   def updateGame(game: Game): Future[Int] = {
