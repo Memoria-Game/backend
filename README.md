@@ -21,7 +21,7 @@ L’utilisation de l’applicatif se fait pour le client à partir d’une appli
 
 ## Règles du jeu 
 Les règles du jeu sont les suivantes :
-
+ 
 1. Un damier de cartes s’aﬃche à l’écran. 
 2. Les cartes se retournent pendant 5 secondes. Celles-ci peuvent avoir 3 valeurs, un bonus rouge, un bonus jaune ou une croix. 
 3. Une fois les cartes faces cachées, le joueur peut contrôler un pion avec les ﬂèches du clavier. Il commence à l’extrémité gauche et doit se rendre à l’extrémité droite.
