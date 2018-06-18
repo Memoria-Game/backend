@@ -78,7 +78,7 @@ class StatisticController @Inject()(cc: ControllerComponents, connexionService: 
   def getPersonalScores = Action.async { request =>
     val userId = connexionService.getUserId(request)
 
-    gameDAO.getAllGameOfUser(userId).map(seq => Ok(Json.toJson(seq.map(g => Score(g.score, g.date)))))
+    gameDAO.getAllGameDoneOfUser(userId).map(seq => Ok(Json.toJson(seq.map(g => Score(g.score, g.date)))))
   }
 
   def userStatToPersonal(us: UserStatistic): PersonalStatistic =
