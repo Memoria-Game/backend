@@ -4,7 +4,7 @@
 # ~~~~
 
 ## Pages
-GET         /                                  controllers.UserController.welcome
+GET            /                                 controllers.UserController.welcome
 #+nocsrf # the "nocsrf" modifier tag is used to disable the CSRF filter for the following route in order to avoid an "Unauthorized" error
 #POST    /                           controllers.HomeController.postStudent
 #GET     /about                      controllers.HomeController.about
@@ -26,43 +26,43 @@ GET         /                                  controllers.UserController.welcom
 #GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 #Rémi
-POST        /signin                            controllers.UserController.signin
+POST           /signin                           controllers.UserController.signin
 # {"pseudo": Dream, "pwd": Hash}
-POST        /signup                            controllers.UserController.signup
+POST           /signup                           controllers.UserController.signup
 # {"pseudo": Dream, "email": "basile.ch@htomail.ch", "pwd": "1234", "country":switzerland }
-GET         /logout                            controllers.UserController.logout
+GET            /logout                           controllers.UserController.logout
 # Rien
-POST        /statistics/add_friend             controllers.UserController.addFriend
+POST           /statistics/add_friend            controllers.UserController.addFriend
 # {"pseudo":Fanfou}
 
 
 
 # Game requests
-POST        /game/endStage                     controllers.GameController.endStage
+POST           /game/endStage                    controllers.GameController.endStage
 # {StageClear: true, temps: 12:00, score: 10212, yellowBonusTot: 3, redBonusTot: 4, yellowBonusUsed: 1, redBonusUsed: 0}
-GET         /game/user/:userId                 controllers.GameController.getGame(userId: Long)
+GET            /game/user/:userId                controllers.GameController.getGame(userId: Long)
 # [{idGame: 1, score: 123, date: Timestamp, isOver: fasle, nbYellowBonus: 1, nbRedBonus: 1, userId: 1, actualStage: Long }
-GET         /game/nextStage                    controllers.GameController.nextStage
+GET            /game/nextStage                   controllers.GameController.nextStage
 # { stageLevel: 13, map: [tableua] }
-GET         /game/resume                       controllers.GameController.resume
+GET            /game/resume                      controllers.GameController.resume
 # {score:12101, yellowBonus: 12, redBonus: 2}
 
 
 # Statistics requests
-# GET /statistics/countries            controllers.StatisticController.getStatByCountries
+GET            /statistics/countries             controllers.StatisticController.getStatByCountries
 # [{"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }, {{"contry":tiers-monde (france LOL), "nbPlayer": 1, "bestScore": -3 }, ...]
 
-GET         /statistics/countries/home        controllers.StatisticController.getStatFromHomeCountry
+GET            /statistics/countries/home        controllers.StatisticController.getStatFromHomeCountry
 # {"contry":Switzerland, "nbPlayer": 3, "bestScore": 12 }
-GET         /statistics/friends               controllers.StatisticController.getStatFriends
+GET            /statistics/friends               controllers.StatisticController.getStatFriends
 # [{"name": Fanfou, "bestScore": 12, "maxLevel": 10}, ... }
-GET         /statistics/personnal             controllers.StatisticController.getPersonalStats
+GET            /statistics/personnal             controllers.StatisticController.getPersonalStats
 # {totYellowBonusUsed:10, totRedBonusUsed:12, bestScore: 19, maxLevel, averageLevel, averageScore}
-GET         /statistics/personnalScore        controllers.StatisticController.getPersonalScores
+GET            /statistics/personnalScore        controllers.StatisticController.getPersonalScores
 # [{"score": 12, "date": 12.10.2018}, ...]
 
 
 # CORS
-OPTIONS / controllers.CORSController.rootOptions
-OPTIONS /*url controllers.CORSController.options(url: String)
+OPTIONS        /                                 controllers.CORSController.rootOptions
+OPTIONS        /*url                             controllers.CORSController.options(url: String)
 

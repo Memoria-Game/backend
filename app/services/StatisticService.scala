@@ -55,12 +55,13 @@ class StatisticService @Inject()(connexionService: ConnexionService, friendsDATO
   def gameOver(g: Game) = {
     val us = Await.result(userStatisticDAO.getStatsFromUser(g.userId), Duration.Inf)
     val totGameUser = Await.result(gameDAO.getNumberOfGameOfUser(g.userId), Duration.Inf)
+    val userStat = Await.result(userStatisticDAO.getStatsFromUser(g.userId), Duration.Inf)
 
     userStatisticDAO.updateStat(UserStatistic(Option(us.userId),
       us.totYellowBonusUsed,
       us.totRedBonusUsed,
-      g.score,
-      g.actualStage,
+      if(g.score > userStat.bestScore) g.score else userStat.bestScore,
+      if(g.actualStage > userStat.maxLevel) g.actualStage else userStat.maxLevel,
       (us.averageLevel * (totGameUser - 1) + g.actualStage) / totGameUser,
       (us.averageScore * (totGameUser - 1) + g.score) / totGameUser,
       us.userId))
