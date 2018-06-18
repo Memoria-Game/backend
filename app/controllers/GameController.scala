@@ -11,7 +11,9 @@ import play.api.libs.json._
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.{ConnexionService, GameService, StatisticService}
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 
 @Singleton
 class GameController @Inject()(cc: ControllerComponents, connexionService: ConnexionService, gameDAO: GameDAO,
@@ -74,19 +76,20 @@ class GameController @Inject()(cc: ControllerComponents, connexionService: Conne
       case Some(g) => {
         gameService.updateGameAfterStage(g, stageOver)
         gameService.endStage(g, stageOver)
+        val gUpdate = Await.result(gameDAO.getCurrentGameOfUser(userId), Duration.Inf).get
         statisticService.UpdateBonusTot(userId, stageOver)
 
         stageOver.stageClear match {
           case false => {
-            gameDAO.gameOver(g.idGame.get)
-            statisticService.gameOver(g)
+            gameDAO.gameOver(gUpdate.idGame.get)
+            statisticService.gameOver(gUpdate)
             Ok(Json.obj(
               "status" -> "OK",
               "message" -> ("Game Over")
             ))
           }
           case true => {
-            gameService.stageComplete(g)
+            gameService.stageComplete(gUpdate)
             Ok(Json.obj(
               "status" -> "OK",
               "message" -> ("Ready to getNext Stage")
