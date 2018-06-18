@@ -48,6 +48,7 @@ class GameService @Inject()(friendsDATO: FriendsDAO, gameDAO: GameDAO, stageDAO:
 
   def createNewGame(userId: Long) = {
     gameDAO.createGame(userId)
+    stageGameDAO.createStageGame(userId, 1)
   }
 
   def winGame(u: User) = {
