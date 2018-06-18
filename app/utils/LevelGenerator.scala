@@ -7,7 +7,7 @@ class LevelGenerator(nbRows: Int,
                      nbWalls: Int) {
 
   // Define the cells' values possibilities
-  private val EMPTY = 0
+  private val EMPTY = 6
   private val WALL = 1
   private val LIFE = 2
   private val SHOW = 3
