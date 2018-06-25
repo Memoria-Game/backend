@@ -1,13 +1,16 @@
-package utils
+package utils;
 
-class LevelGenerator(nbRows: Int,
-                     nbCols: Int,
-                     nbYellowBonus: Int,
-                     nbRedBonus: Int,
-                     nbWalls: Int) {
+class LevelGenerator(stageNumber: Int) {
+  assert(stageNumber > 0)
+
+  private val nbRows = (stageNumber/2 + 2).toInt
+  private val nbCols = (stageNumber/2 + 2).toInt
+  private val nbRedBonus = nbRows/3;
+  private val nbYellowBonus = nbRows/3;
+  private val nbWalls = 2*nbRows*nbCols/3+ (stageNumber%2)*nbRows*nbCols/8;
 
   // Define the cells' values possibilities
-  private val EMPTY = 6
+  private val EMPTY = 0// => 6
   private val WALL = 1
   private val LIFE = 2
   private val SHOW = 3
@@ -63,7 +66,8 @@ class LevelGenerator(nbRows: Int,
     if (emptyCells.length > 0) {
       val r = scala.util.Random
       if (number > 0) {
-        val elem = emptyCells(r.nextInt(emptyCells.length))
+        val nextCells = if(emptyCells.length > (nbCols*nbRows*0.8).toInt) r.nextInt(emptyCells.length/2)+ emptyCells.length/4 else  r.nextInt(emptyCells.length)
+        val elem = emptyCells(nextCells)
         val newEmptyCells = emptyCells.filter(x => x != elem)
         level(elem._1)(elem._2) = cellType
         if (pathExist(level.map(_.clone()), ENTRY_POINT, if (cellType == WALL) EXIT_POINT else (elem._1, elem._2))) {
