@@ -10,13 +10,9 @@ import scala.concurrent.duration.Duration
 
 class GameService @Inject()(friendsDATO: FriendsDAO, gameDAO: GameDAO, stageDAO: StageDAO, stageGameDAO: StageGameDAO) {
   def createNewStage(stageId: Long): Array[Array[Int]] = {
-    val s = Await.result(stageDAO.getStage(stageId), Duration.Inf)
+    //val s = Await.result(stageDAO.getStage(stageId), Duration.Inf)
 
-    val levelGenerator = new LevelGenerator(s.nbOfRows,
-      s.nbOfCols,
-      s.nbOfYellowBonus,
-      s.nbOfRedBonus,
-      s.nbOfWalls)
+    val levelGenerator = new LevelGenerator(stageId.toInt)
 
     levelGenerator.generateLevel()
   }
