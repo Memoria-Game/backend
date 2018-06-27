@@ -10,7 +10,7 @@ class LevelGenerator(stageNumber: Int) {
   private val nbWalls = 3*nbRows*nbCols/5+ (stageNumber%2)*nbRows*nbCols/8;
 
   // Define the cells' values possibilities
-  private val EMPTY = 0// => 6
+  private val EMPTY = 6
   private val WALL = 1
   private val LIFE = 2
   private val SHOW = 3
