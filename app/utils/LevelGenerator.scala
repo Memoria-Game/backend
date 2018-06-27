@@ -7,7 +7,7 @@ class LevelGenerator(stageNumber: Int) {
   private val nbCols = (stageNumber/2 + 2).toInt
   private val nbRedBonus = nbRows/3;
   private val nbYellowBonus = nbRows/3;
-  private val nbWalls = 2*nbRows*nbCols/3+ (stageNumber%2)*nbRows*nbCols/8;
+  private val nbWalls = 3*nbRows*nbCols/5+ (stageNumber%2)*nbRows*nbCols/8;
 
   // Define the cells' values possibilities
   private val EMPTY = 0// => 6
